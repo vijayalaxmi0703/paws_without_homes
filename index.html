@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Paws Without Homes — Every Paw Deserves a Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --cream:#fdf6ec;
+  --warm:#f5ebe0;
+  --rust:#c4652a;
+  --rust-dark:#9e4d1e;
+  --rust-light:#e8845a;
+  --forest:#2d5016;
+  --forest-light:#4a7c27;
+  --gold:#d4a853;
+  --ink:#1a1208;
+  --ash:#6b5b4e;
+  --white:#fff;
+  --shadow:rgba(26,18,8,.12);
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+/* ── ADOPTION ── */
+.animal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;  /* Center cards horizontally */
+  align-items: start;     /* Align cards to top for consistent height */
+  max-width: 100%;
+  margin: 0 auto;
+}
+.animal-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+}
+.animal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+}
+.animal-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.animal-info {
+  padding: 1rem;
+}
+.animal-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: .5rem;
+}
+.animal-details {
+  font-size: .9rem;
+  color: var(--ash);
+  line-height: 1.5;
+}
+.adopt-btn {
+  background: var(--rust);
+  color: var(--white);
+  border: none;
+  padding: .6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: background .2s;
+}
+.adopt-btn:hover {
+  background: var(--rust-light);
+}
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(253,246,236,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(196,101,42,.15);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--rust);display:flex;align-items:center;gap:.5rem;cursor:pointer}
+.nav-logo span{font-size:1.5rem}
+.nav-links{display:flex;gap:.25rem;align-items:center}
+.nav-link{font-size:.8rem;font-weight:500;color:var(--ash);padding:.4rem .7rem;border-radius:8px;cursor:pointer;transition:all .2s;border:none;background:none;white-space:nowrap}
+.nav-link:hover,.nav-link.active{background:var(--rust);color:var(--white)}
+.nav-admin{font-size:.75rem;background:var(--forest);color:var(--white);padding:.4rem .8rem;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+.nav-admin:hover{background:var(--forest-light)}
+
+/* ── SECTIONS ── */
+.section{display:none;min-height:100vh;padding:80px 0 40px}
+.section.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+
+/* ── HERO ── */
+#home{background:linear-gradient(160deg,var(--cream) 0%,var(--warm) 100%);position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero-circle{position:absolute;border-radius:50%;background:var(--rust);opacity:.06}
+.hero-circle:nth-child(1){width:600px;height:600px;right:-200px;top:-150px}
+.hero-circle:nth-child(2){width:400px;height:400px;left:-100px;bottom:-100px;background:var(--forest)}
+.hero-content{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;min-height:calc(100vh - 80px)}
+.hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:900;line-height:1.1;color:var(--ink);margin-bottom:1rem}
+.hero-text h1 em{color:var(--rust);font-style:italic}
+.hero-tagline{font-size:1.05rem;color:var(--ash);line-height:1.7;margin-bottom:2rem;font-weight:300}
+.hero-mission{background:var(--white);border-left:4px solid var(--gold);padding:1rem 1.2rem;border-radius:0 var(--radius) var(--radius) 0;margin-bottom:2rem;font-size:.9rem;color:var(--ash);line-height:1.6}
+.hero-stats{display:flex;gap:2rem;margin-bottom:2.5rem}
+.stat{text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--rust)}
+.stat-label{font-size:.75rem;color:var(--ash);font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{background:var(--rust);color:var(--white);border:none;padding:.85rem 2rem;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(196,101,42,.35)}
+.btn-primary:hover{background:var(--rust-dark);transform:translateY(-2px);box-shadow:0 6px 24px rgba(196,101,42,.4)}
+.btn-secondary{background:transparent;color:var(--rust);border:2px solid var(--rust);padding:.85rem 2rem;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{background:var(--rust);color:var(--white)}
+.hero-visual{display:flex;flex-direction:column;gap:1rem;align-items:center}
+.paw-art{width:100%;max-width:420px;height:400px;background:linear-gradient(135deg,var(--warm) 0%,#f0dac0 100%);border-radius:30px;display:flex;align-items:center;justify-content:center;font-size:8rem;box-shadow:0 20px 60px var(--shadow);position:relative;overflow:hidden}
+.paw-art::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(196,101,42,.1),transparent 60%)}
+
+/* ── MENU GRID ── */
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem}
+.menu-card{background:var(--white);border:1px solid rgba(196,101,42,.12);border-radius:var(--radius);padding:1.5rem;cursor:pointer;transition:all .25s;text-align:left;display:flex;flex-direction:column;gap:.5rem;box-shadow:0 2px 12px var(--shadow)}
+.menu-card:hover{border-color:var(--rust);transform:translateY(-4px);box-shadow:0 8px 30px rgba(196,101,42,.2)}
+.menu-card-icon{font-size:2rem}
+.menu-card-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink)}
+.menu-card-desc{font-size:.8rem;color:var(--ash);line-height:1.5}
+
+/* ── SECTION HEADERS ── */
+.section-header{text-align:center;margin-bottom:2.5rem;padding-top:1rem}
+.section-header h2{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--ink);margin-bottom:.5rem}
+.section-header p{color:var(--ash);font-size:.95rem;max-width:500px;margin:0 auto}
+.section-divider{width:60px;height:3px;background:var(--rust);margin:.75rem auto}
+
+/* ── FORMS ── */
+.form-card{background:var(--white);border-radius:20px;padding:2rem;box-shadow:0 4px 30px var(--shadow);max-width:600px;margin:0 auto}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:.4rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:.7rem 1rem;border:1.5px solid rgba(107,91,78,.2);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);background:var(--cream);transition:border-color .2s;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--rust);background:var(--white)}
+.form-group textarea{resize:vertical;min-height:90px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.btn-submit{width:100%;background:var(--rust);color:var(--white);border:none;padding:1rem;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:.5rem}
+.btn-submit:hover{background:var(--rust-dark);transform:translateY(-1px)}
+.btn-green{background:var(--forest)}
+.btn-green:hover{background:var(--forest-light)}
+
+/* ── ALERTS ── */
+.alert{padding:.9rem 1.2rem;border-radius:10px;font-size:.9rem;font-weight:500;margin:.75rem 0;display:none}
+.alert.show{display:block;animation:fadeIn .3s}
+.alert-success{background:#e8f5e9;color:#2d5016;border:1px solid #4a7c27}
+.alert-error{background:#fdecea;color:#c62828;border:1px solid #e57373}
+.alert-info{background:#e3f2fd;color:#1565c0;border:1px solid #64b5f6}
+
+/* ── CASE STATUS ── */
+.case-card{background:var(--white);border-radius:var(--radius);padding:1.5rem;box-shadow:0 2px 15px var(--shadow);border-left:4px solid var(--rust)}
+.case-badge{display:inline-block;padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.badge-reported{background:#fff3e0;color:#e65100}
+.badge-rescued{background:#e8f5e9;color:#1b5e20}
+.badge-treatment{background:#e3f2fd;color:#0d47a1}
+.badge-adopted{background:#f3e5f5;color:#4a148c}
+.timeline{margin-top:1rem;border-left:2px solid rgba(196,101,42,.2);padding-left:1rem}
+.timeline-item{margin-bottom:.75rem;position:relative}
+.timeline-item::before{content:'';position:absolute;left:-1.35rem;top:6px;width:10px;height:10px;border-radius:50%;background:var(--rust)}
+.timeline-time{font-size:.75rem;color:var(--ash)}
+.timeline-note{font-size:.85rem;font-weight:500}
+
+/* ── ANIMAL CARDS ── */
+.animal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+.animal-card{background:var(--white);border-radius:20px;overflow:hidden;box-shadow:0 2px 15px var(--shadow);transition:all .25s;cursor:pointer}
+.animal-card:hover{transform:translateY(-5px);box-shadow:0 10px 35px rgba(196,101,42,.2)}
+.animal-avatar{height:200px;display:flex;align-items:center;justify-content:center;font-size:6rem;position:relative}
+.animal-avatar.dog-bg{background:linear-gradient(135deg,#fcecc7,#f5d78e)}
+.animal-avatar.cat-bg{background:linear-gradient(135deg,#e8d5f5,#d4a8ef)}
+.animal-info{padding:1.2rem}
+.animal-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700}
+.animal-meta{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.tag{background:var(--warm);color:var(--ash);font-size:.72rem;font-weight:600;padding:.2rem .6rem;border-radius:20px}
+.tag-green{background:#e8f5e9;color:var(--forest)}
+.animal-personality{font-size:.82rem;color:var(--ash);line-height:1.5;margin:.5rem 0}
+.btn-adopt-now{width:100%;margin-top:.75rem;background:var(--rust);color:var(--white);border:none;padding:.65rem;border-radius:10px;font-weight:600;font-size:.85rem;cursor:pointer;transition:background .2s}
+.btn-adopt-now:hover{background:var(--rust-dark)}
+.filter-bar{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:.5rem 1.2rem;border-radius:30px;border:1.5px solid rgba(196,101,42,.25);background:transparent;font-size:.85rem;font-weight:600;color:var(--ash);cursor:pointer;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{background:var(--rust);color:var(--white);border-color:var(--rust)}
+
+/* ── GUIDELINES BOX ── */
+.guidelines-box{background:linear-gradient(135deg,var(--forest) 0%,var(--forest-light) 100%);border-radius:20px;padding:2rem;color:var(--white);margin-bottom:2rem}
+.guidelines-box h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:1rem}
+.guidelines-list{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.guidelines-list li{list-style:none;font-size:.83rem;display:flex;align-items:start;gap:.4rem;line-height:1.5}
+.guidelines-list li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0}
+
+/* ── DONATION ── */
+.donation-impact{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.impact-card{background:var(--white);border-radius:var(--radius);padding:1.2rem;text-align:center;box-shadow:0 2px 12px var(--shadow)}
+.impact-amount{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--rust)}
+.impact-desc{font-size:.8rem;color:var(--ash);margin-top:.3rem;line-height:1.4}
+.total-box{background:linear-gradient(135deg,var(--rust) 0%,var(--rust-dark) 100%);border-radius:var(--radius);padding:1.2rem;text-align:center;color:var(--white);margin-bottom:1.5rem}
+.total-box .total-label{font-size:.85rem;opacity:.8;margin-bottom:.25rem}
+.total-box .total-amount{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900}
+
+/* ── AWARENESS ── */
+.awareness-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.awareness-card{background:var(--white);border-radius:20px;padding:1.75rem;box-shadow:0 2px 15px var(--shadow)}
+.awareness-card h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ink);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.awareness-card p,.awareness-card li{font-size:.85rem;color:var(--ash);line-height:1.7}
+.awareness-card ul{padding-left:1.2rem;margin-top:.5rem}
+.awareness-card ul li{margin-bottom:.4rem}
+
+/* ── LOST FOUND ── */
+.lf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;margin-top:1.5rem}
+.lf-card{background:var(--white);border-radius:var(--radius);padding:1.2rem;box-shadow:0 2px 12px var(--shadow);border-top:4px solid var(--rust)}
+.lf-card.found-card{border-top-color:var(--forest)}
+.lf-badge{display:inline-block;padding:.2rem .7rem;border-radius:20px;font-size:.72rem;font-weight:700;margin-bottom:.5rem}
+.lf-lost{background:#fdecea;color:#c62828}
+.lf-found{background:#e8f5e9;color:#2d5016}
+.lf-search{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.lf-search input,.lf-search select{padding:.6rem 1rem;border:1.5px solid rgba(107,91,78,.2);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;background:var(--white);flex:1;min-width:150px;outline:none}
+.lf-search input:focus,.lf-search select:focus{border-color:var(--rust)}
+.btn-search{background:var(--rust);color:var(--white);border:none;padding:.6rem 1.2rem;border-radius:10px;font-weight:600;cursor:pointer;transition:background .2s}
+.btn-search:hover{background:var(--rust-dark)}
+
+/* ── ADMIN ── */
+.admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.admin-stat{background:var(--white);border-radius:var(--radius);padding:1.2rem;text-align:center;box-shadow:0 2px 12px var(--shadow);border-top:3px solid var(--rust)}
+.admin-stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--rust)}
+.admin-stat-label{font-size:.78rem;color:var(--ash);text-transform:uppercase;letter-spacing:.06em;margin-top:.25rem}
+.admin-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.admin-tab{padding:.5rem 1rem;border-radius:8px;border:1.5px solid rgba(107,91,78,.2);background:transparent;font-size:.83rem;font-weight:600;color:var(--ash);cursor:pointer;transition:all .2s}
+.admin-tab.active,.admin-tab:hover{background:var(--forest);color:var(--white);border-color:var(--forest)}
+.admin-panel{background:var(--white);border-radius:var(--radius);padding:1.5rem;box-shadow:0 2px 12px var(--shadow);display:none}
+.admin-panel.active{display:block;animation:fadeIn .3s}
+.data-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.data-table th{background:var(--warm);padding:.7rem 1rem;text-align:left;font-weight:700;color:var(--ink)}
+.data-table td{padding:.65rem 1rem;border-bottom:1px solid rgba(107,91,78,.1);vertical-align:top}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:rgba(245,235,224,.5)}
+.btn-sm{padding:.3rem .7rem;border-radius:6px;border:none;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-approve{background:#e8f5e9;color:var(--forest)}
+.btn-approve:hover{background:var(--forest);color:var(--white)}
+.btn-reject{background:#fdecea;color:#c62828}
+.btn-reject:hover{background:#c62828;color:var(--white)}
+.btn-update{background:#e3f2fd;color:#1565c0}
+.btn-update:hover{background:#1565c0;color:var(--white)}
+.status-select{padding:.3rem .6rem;border-radius:6px;border:1.5px solid rgba(107,91,78,.2);font-size:.8rem;background:var(--white);cursor:pointer}
+.admin-login{max-width:380px;margin:4rem auto}
+.admin-login h2{font-family:'Playfair Display',serif;font-size:1.6rem;text-align:center;margin-bottom:.5rem}
+.admin-login p{text-align:center;color:var(--ash);font-size:.85rem;margin-bottom:1.5rem}
+
+/* ── VOLUNTEER ── */
+.vol-form-wrap{max-width:600px;margin:0 auto}
+.vol-highlight{background:linear-gradient(135deg,var(--forest),var(--forest-light));border-radius:20px;padding:1.5rem;color:var(--white);margin-bottom:1.5rem;text-align:center}
+.vol-highlight h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.5rem}
+.vol-highlight p{font-size:.85rem;opacity:.9;line-height:1.6}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,18,8,.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex;animation:fadeIn .25s}
+.modal{background:var(--white);border-radius:20px;padding:2rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(26,18,8,.3)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-header h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700}
+.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--ash);padding:.25rem}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);color:rgba(255,255,255,.7);text-align:center;padding:2rem;font-size:.82rem;margin-top:3rem}
+footer strong{color:var(--gold)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .hero-content{grid-template-columns:1fr;gap:2rem}
+  .hero-visual{display:none}
+  .form-row{grid-template-columns:1fr}
+  .awareness-grid{grid-template-columns:1fr}
+  .guidelines-list{grid-template-columns:1fr}
+  .donation-impact{grid-template-columns:1fr}
+  .nav-links{gap:0}
+  .nav-link{font-size:.72rem;padding:.35rem .5rem}
+}
+
+/* ── LOADING ── */
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:var(--white);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.4rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showSection('home')"><span>🐾</span> Paws Without Homes</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showSection('home')">Home</button>
+    <button class="nav-link" onclick="showSection('report')">🆘 Report</button>
+    <button class="nav-link" onclick="showSection('adopt')">🏠 Adopt</button>
+    <button class="nav-link" onclick="showSection('donate')">💖 Donate</button>
+    <button class="nav-link" onclick="showSection('volunteer')">🤝 Volunteer</button>
+    <button class="nav-link" onclick="showSection('lostfound')">🔎 Lost & Found</button>
+    <button class="nav-link" onclick="showSection('awareness')">📚 Awareness</button>
+    <button class="nav-admin" onclick="showSection('admin')">🛠 Admin</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════ HOME ══ -->
+<section id="home" class="section active">
+  <div class="hero-bg"><div class="hero-circle"></div><div class="hero-circle"></div></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Every <em>Paw</em> Deserves a Home</h1>
+        <p class="hero-tagline">A platform to rescue, treat, and rehome stray animals while encouraging community support across India.</p>
+        <div class="hero-mission">
+          🐾 <strong>Our Mission:</strong> We connect compassionate people with animals in need — from street rescues to loving adoptions. Together, we create a world where no paw is left behind.
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num" id="stat-rescued">0</div><div class="stat-label">Rescued</div></div>
+          <div class="stat"><div class="stat-num" id="stat-adopted">0</div><div class="stat-label">Adopted</div></div>
+          <div class="stat"><div class="stat-num" id="stat-vols">0</div><div class="stat-label">Volunteers</div></div>
+        </div>
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="showSection('report')">🆘 Report an Animal</button>
+          <button class="btn-secondary" onclick="showSection('adopt')">🏠 Find a Companion</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="paw-art">🐾</div>
+      </div>
+    </div>
+
+    <div class="section-header" style="padding-top:2rem">
+      <h2>What Would You Like To Do?</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="showSection('report')">
+        <div class="menu-card-icon">🆘</div>
+        <div class="menu-card-title">Report an Animal</div>
+        <div class="menu-card-desc">Spotted a stray or injured animal? File a rescue report and get a unique Case ID to track progress.</div>
+      </div>
+      <div class="menu-card" onclick="showSection('adopt')">
+        <div class="menu-card-icon">🏠</div>
+        <div class="menu-card-title">Adopt an Animal</div>
+        <div class="menu-card-desc">Browse rescued dogs and cats ready for their forever homes. Filter and apply today.</div>
+      </div>
+      <div class="menu-card" onclick="showSection('donate')">
+        <div class="menu-card-icon">💖</div>
+        <div class="menu-card-title">Donate</div>
+        <div class="menu-card-desc">Your donation funds food, medicine, and shelter. Every rupee makes a difference.</div>
+      </div>
+      <div class="menu-card" onclick="showSection('volunteer')">
+        <div class="menu-card-icon">🤝</div>
+        <div class="menu-card-title">Volunteer</div>
+        <div class="menu-card-desc">Join our rescue network. Help with rescues, home visits, and community awareness.</div>
+      </div>
+      <div class="menu-card" onclick="showSection('lostfound')">
+        <div class="menu-card-icon">🔎</div>
+        <div class="menu-card-title">Lost & Found</div>
+        <div class="menu-card-desc">Lost your pet or found one? Post here and reconnect families with their animals.</div>
+      </div>
+      <div class="menu-card" onclick="showSection('awareness')">
+        <div class="menu-card-icon">📚</div>
+        <div class="menu-card-title">Awareness</div>
+        <div class="menu-card-desc">Learn about animal cruelty laws, first aid for strays, sterilization, and responsible adoption.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ REPORT ══ -->
+<section id="report" class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>🆘 Report an Animal</h2>
+      <div class="section-divider"></div>
+      <p>Spotted an injured or stray animal? File a report and our team will respond as quickly as possible.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start">
+      <div class="form-card">
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:1.2rem;font-size:1.2rem">File a Rescue Report</h3>
+        <div class="alert" id="report-alert"></div>
+        <div class="form-group">
+          <label>📍 Location *</label>
+          <input type="text" id="r-location" placeholder="Street, landmark, area, city"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>🐾 Animal Type *</label>
+            <select id="r-type">
+              <option value="">Select...</option>
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>🩹 Injury Type *</label>
+            <select id="r-injury">
+              <option value="">Select...</option>
+              <option value="Hit by vehicle">Hit by vehicle</option>
+              <option value="Wound/Bleeding">Wound/Bleeding</option>
+              <option value="Malnourished">Malnourished</option>
+              <option value="Skin disease">Skin disease</option>
+              <option value="Broken limb">Broken limb</option>
+              <option value="Sick/Lethargic">Sick/Lethargic</option>
+              <option value="Trapped">Trapped</option>
+              <option value="No injury visible">No injury visible</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>📝 Description *</label>
+          <textarea id="r-desc" placeholder="Color, size, condition, behaviour, any identifying marks..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>📞 Your Contact Number *</label>
+          <input type="tel" id="r-contact" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+        <button class="btn-submit" onclick="submitReport()">🆘 File Report & Get Case ID</button>
+      </div>
+      <div>
+        <div class="form-card" style="margin-bottom:1.5rem">
+          <h3 style="font-family:'Playfair Display',serif;margin-bottom:1rem;font-size:1.1rem">🔍 Check Case Status</h3>
+          <div class="alert" id="case-alert"></div>
+          <div class="form-group">
+            <label>Case ID (e.g. PAW1001)</label>
+            <input type="text" id="case-id-input" placeholder="PAW1001" style="text-transform:uppercase"/>
+          </div>
+          <button class="btn-submit" onclick="checkCase()" style="margin-top:0">Check Status</button>
+          <div id="case-result" style="margin-top:1rem"></div>
+        </div>
+        <div style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-radius:var(--radius);padding:1.5rem;border-left:4px solid var(--gold)">
+          <h4 style="font-size:1rem;margin-bottom:.75rem">⚡ Emergency Contacts</h4>
+          <p style="font-size:.83rem;color:var(--ash);line-height:1.8">
+            📞 Animal Welfare Board of India: <strong>1800-123-4567</strong><br>
+            🚑 Local NGO Hotline: <strong>+91 98765 43210</strong><br>
+            🐾 PETA India: <strong>+91 98201 22602</strong><br>
+            🏥 Emergency Vet: <strong>+91 80 4567 8901</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ ADOPT ══ -->
+<section id="adopt" class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>🏠 Adopt an Animal</h2>
+      <div class="section-divider"></div>
+      <p>These animals have been rescued, treated, and are ready to find their forever home. Could you be the one?</p>
+    </div>
+    <div class="guidelines-box">
+      <h3>📋 Adoption Guidelines</h3>
+      <ul class="guidelines-list">
+        <li>Adopter must be 21+ years with stable income</li>
+        <li>Home visit & verification may be conducted</li>
+        <li>Animal must NOT be resold or given away</li>
+        <li>Regular vet check-ups are the adopter's responsibility</li>
+        <li>Return to us if unable to keep — never abandon</li>
+        <li>Provide adequate space, food, and enrichment</li>
+        <li>Keep vaccinations and deworming up to date</li>
+        <li>No caging/chaining — animals deserve freedom</li>
+      </ul>
+    </div>
+    <div class="filter-bar">
+      <span style="font-size:.85rem;font-weight:600;color:var(--ash)">Filter:</span>
+      <button class="filter-btn active" onclick="filterAnimals('all',this)">All</button>
+      <button class="filter-btn" onclick="filterAnimals('dog',this)">🐶 Dogs</button>
+      <button class="filter-btn" onclick="filterAnimals('cat',this)">🐱 Cats</button>
+    </div>
+    <div class="animal-grid" id="animals-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ash)">Loading animals...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ DONATE ══ -->
+<section id="donate" class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>💖 Make a Donation</h2>
+      <div class="section-divider"></div>
+      <p>Your generosity directly funds rescue operations, medical care, and rehoming efforts.</p>
+    </div>
+    <div class="donation-impact">
+      <div class="impact-card">
+        <div class="impact-amount">₹100</div>
+        <div class="impact-desc">Provides a day's nutritious meal for 2 stray dogs</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-amount">₹500</div>
+        <div class="impact-desc">Feeds 10 dogs for a full day + vitamins</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-amount">₹2000</div>
+        <div class="impact-desc">Covers vaccination for 5 animals</div>
+      </div>
+    </div>
+    <div class="total-box" id="donation-total-box">
+      <div class="total-label">💰 Total Community Donations Raised</div>
+      <div class="total-amount" id="total-donations">Loading...</div>
+    </div>
+    <div class="form-card">
+      <h3 style="font-family:'Playfair Display',serif;margin-bottom:1.2rem;font-size:1.2rem">Donate Today</h3>
+      <div class="alert" id="donate-alert"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="d-name" placeholder="Full name"/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="d-email" placeholder="For receipt"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>💰 Amount (₹) *</label>
+          <input type="number" id="d-amount" placeholder="Enter amount" min="1"/>
+        </div>
+        <div class="form-group">
+          <label>Frequency *</label>
+          <select id="d-freq">
+            <option value="One-time">One-time</option>
+            <option value="Monthly">Monthly</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Message (Optional)</label>
+        <textarea id="d-message" placeholder="A note for the animals..." style="min-height:70px"></textarea>
+      </div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
+        <button class="filter-btn" onclick="setAmount(100)">₹100</button>
+        <button class="filter-btn" onclick="setAmount(500)">₹500</button>
+        <button class="filter-btn" onclick="setAmount(1000)">₹1000</button>
+        <button class="filter-btn" onclick="setAmount(2000)">₹2000</button>
+        <button class="filter-btn" onclick="setAmount(5000)">₹5000</button>
+      </div>
+      <button class="btn-submit" onclick="submitDonation()">💖 Donate Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ VOLUNTEER ══ -->
+<section id="volunteer" class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>🤝 Join as Volunteer</h2>
+      <div class="section-divider"></div>
+      <p>Be the reason a stray animal finds safety. Our volunteers are the backbone of every rescue.</p>
+    </div>
+    <div class="vol-form-wrap">
+      <div class="vol-highlight">
+        <h3>Why Volunteer With Us?</h3>
+        <p>Join 200+ active volunteers across the city. Help with rescues, transport, home visits, awareness drives, and foster care. Every hour you give changes an animal's life.</p>
+      </div>
+      <div class="form-card">
+        <div class="alert" id="vol-alert"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="v-name" placeholder="Your full name"/>
+          </div>
+          <div class="form-group">
+            <label>Area / Locality *</label>
+            <input type="text" id="v-area" placeholder="Your neighborhood"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Contact Number *</label>
+            <input type="tel" id="v-contact" placeholder="+91 XXXXX XXXXX"/>
+          </div>
+          <div class="form-group">
+            <label>Availability *</label>
+            <select id="v-avail">
+              <option value="">Select...</option>
+              <option value="Morning">Morning (6am–12pm)</option>
+              <option value="Evening">Evening (4pm–9pm)</option>
+              <option value="Both">Both Slots</option>
+              <option value="Weekends">Weekends Only</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Skills / Experience (Optional)</label>
+          <textarea id="v-skills" placeholder="Driving, first aid, photography, social media, foster care..." style="min-height:70px"></textarea>
+        </div>
+        <button class="btn-submit btn-green" onclick="submitVolunteer()">🤝 Register as Volunteer</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ LOST & FOUND ══ -->
+<section id="lostfound" class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>🔎 Lost & Found</h2>
+      <div class="section-divider"></div>
+      <p>Lost your pet or found one? Post here to help reunite animals with their families.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:2rem;align-items:start">
+      <div class="form-card">
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:1.2rem;font-size:1.1rem">📢 Post an Alert</h3>
+        <div class="alert" id="lf-alert"></div>
+        <div class="form-group">
+          <label>Post Type *</label>
+          <select id="lf-type">
+            <option value="">Select...</option>
+            <option value="Lost">🔴 Lost Pet</option>
+            <option value="Found">🟢 Found Animal</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Animal Type *</label>
+            <select id="lf-animal">
+              <option value="">Select...</option>
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Pet Name</label>
+            <input type="text" id="lf-name" placeholder="If known"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Location *</label>
+          <input type="text" id="lf-location" placeholder="Area, street, landmark"/>
+        </div>
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea id="lf-desc" placeholder="Color, breed, collar, distinctive marks, date seen..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Contact Number *</label>
+          <input type="tel" id="lf-contact" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+        <button class="btn-submit" onclick="submitLostFound()">📢 Post Alert</button>
+      </div>
+      <div>
+        <div class="lf-search">
+          <input type="text" id="lf-search-loc" placeholder="🔍 Search by location..."/>
+          <select id="lf-search-type">
+            <option value="">All types</option>
+            <option value="Dog">Dog</option>
+            <option value="Cat">Cat</option>
+          </select>
+          <select id="lf-search-post">
+            <option value="">Lost & Found</option>
+            <option value="Lost">Lost only</option>
+            <option value="Found">Found only</option>
+          </select>
+          <button class="btn-search" onclick="searchLostFound()">Search</button>
+        </div>
+        <div id="lf-results">
+          <div style="text-align:center;padding:2rem;color:var(--ash);font-size:.9rem">Click Search to load posts, or post your alert first.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ AWARENESS ══ -->
+<section id="awareness" class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>📚 Awareness Center</h2>
+      <div class="section-divider"></div>
+      <p>Education is the first step to a kinder world for animals. Learn, share, and act.</p>
+    </div>
+    <div class="awareness-grid">
+      <div class="awareness-card">
+        <h3>⚖️ Animal Cruelty Laws in India</h3>
+        <p>India has strong legal protections for animals:</p>
+        <ul>
+          <li><strong>Prevention of Cruelty to Animals Act, 1960</strong> — Prohibits unnecessary pain or suffering inflicted on any animal. Violations are punishable by fine and imprisonment.</li>
+          <li><strong>IPC Section 428 & 429</strong> — Killing, maiming or rendering useless any animal is a cognizable offence with up to 5 years imprisonment.</li>
+          <li><strong>WPA 1972</strong> — Wildlife Protection Act covers specific species from harm and illegal trade.</li>
+          <li><strong>Stray feeding is LEGAL</strong> — RWAs cannot ban residents from feeding community animals (High Court ruling, 2022).</li>
+        </ul>
+      </div>
+      <div class="awareness-card">
+        <h3>🚑 First Aid for Injured Animals</h3>
+        <ul>
+          <li><strong>Stay calm</strong> — Approach slowly, avoid sudden movements that may startle the animal.</li>
+          <li><strong>Muzzle if needed</strong> — Even gentle animals may bite when in pain. Use a cloth gently.</li>
+          <li><strong>Stop bleeding</strong> — Apply gentle pressure with a clean cloth. Do not remove embedded objects.</li>
+          <li><strong>Keep warm</strong> — Cover with a blanket, avoid moving the spine if possible.</li>
+          <li><strong>Don't offer food/water</strong> — The animal may need surgery. Consult a vet first.</li>
+          <li><strong>Transport safely</strong> — Use a cardboard box or blanket as a stretcher. Rush to the nearest vet.</li>
+        </ul>
+      </div>
+      <div class="awareness-card">
+        <h3>🐾 Adoption vs. Buying Pets</h3>
+        <p>Choosing to adopt saves lives. Here's why:</p>
+        <ul>
+          <li><strong>Adopt:</strong> Gives a rescued animal a second chance at life. Animals from shelters are often already vaccinated and sterilized.</li>
+          <li><strong>Buying from pet shops</strong> often supports cruel puppy mills where animals live in terrible conditions.</li>
+          <li><strong>Indie dogs</strong> are healthier, more adaptable, and have fewer genetic diseases than many breeds.</li>
+          <li><strong>Every adoption</strong> creates space for another rescue — a ripple effect of kindness.</li>
+          <li><strong>Cost:</strong> Adoption is significantly cheaper and the animal gets ongoing NGO support.</li>
+        </ul>
+      </div>
+      <div class="awareness-card">
+        <h3>✂️ Importance of Sterilization (ABC Program)</h3>
+        <p>Animal Birth Control is humane and scientifically proven:</p>
+        <ul>
+          <li><strong>Controls population</strong> — One unsterilized dog can lead to 67,000 descendants in 6 years.</li>
+          <li><strong>Reduces aggression</strong> — Sterilized animals are calmer and less territorial.</li>
+          <li><strong>Health benefits</strong> — Reduces risk of cancers and infections in animals.</li>
+          <li><strong>Humane solution</strong> — ABC + Return is the only sustainable, legal approach to managing community animals.</li>
+          <li><strong>Culling doesn't work</strong> — Removing animals creates a vacuum quickly filled by others. Sterilization is permanent.</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,var(--rust),var(--rust-dark));border-radius:20px;padding:2rem;text-align:center;color:var(--white);margin-top:1.5rem">
+      <p style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:.75rem">"The greatness of a nation can be judged by the way its animals are treated."</p>
+      <p style="font-size:.85rem;opacity:.8">— Mahatma Gandhi</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════ ADMIN ══ -->
+<section id="admin" class="section">
+  <div class="container">
+    <div id="admin-login-view">
+      <div class="admin-login">
+        <div style="text-align:center;font-size:3rem;margin-bottom:1rem">🛠</div>
+        <h2>Admin Panel</h2>
+        <p>Enter your password to access the admin dashboard.</p>
+        <div class="form-card" style="margin-top:1.5rem">
+          <div class="alert" id="admin-login-alert"></div>
+          <div class="form-group">
+            <label>Admin Password</label>
+            <input type="password" id="admin-password" placeholder="Enter password" onkeydown="if(event.key==='Enter')adminLogin()"/>
+          </div>
+          <button class="btn-submit btn-green" onclick="adminLogin()">🔐 Login</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="admin-dashboard" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem">Admin Dashboard</h2>
+          <p style="color:var(--ash);font-size:.85rem">Paws Without Homes Management Console</p>
+        </div>
+        <button onclick="adminLogout()" style="background:none;border:1px solid #ddd;padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-size:.85rem;color:var(--ash)">Logout</button>
+      </div>
+      <div class="admin-grid" id="admin-stats-grid">
+        <div class="admin-stat"><div class="admin-stat-num" id="as-cases">-</div><div class="admin-stat-label">Total Cases</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" id="as-rescued">-</div><div class="admin-stat-label">Rescued</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" id="as-adopted">-</div><div class="admin-stat-label">Adopted</div></div>
+        <div class="admin-stat" style="border-top-color:var(--forest)"><div class="admin-stat-num" id="as-vols" style="color:var(--forest)">-</div><div class="admin-stat-label">Volunteers</div></div>
+        <div class="admin-stat" style="border-top-color:var(--gold)"><div class="admin-stat-num" id="as-donations" style="color:var(--gold)">-</div><div class="admin-stat-label">Donations ₹</div></div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="adminTab('reports',this)">📋 Reports</button>
+        <button class="admin-tab" onclick="adminTab('adoptions',this)">🏠 Adoptions</button>
+        <button class="admin-tab" onclick="adminTab('donations_tab',this)">💖 Donations</button>
+        <button class="admin-tab" onclick="adminTab('volunteers_tab',this)">🤝 Volunteers</button>
+        <button class="admin-tab" onclick="adminTab('medical',this)">🏥 Medical</button>
+      </div>
+
+      <!-- Reports Panel -->
+      <div class="admin-panel active" id="panel-reports">
+        <div style="overflow-x:auto">
+          <table class="data-table" id="tbl-reports">
+            <thead><tr><th>Case ID</th><th>Type</th><th>Location</th><th>Injury</th><th>Status</th><th>Reported</th><th>Update Status</th></tr></thead>
+            <tbody id="reports-tbody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--ash)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Adoptions Panel -->
+      <div class="admin-panel" id="panel-adoptions">
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Animal</th><th>Applicant</th><th>Contact</th><th>Status</th><th>Applied</th><th>Action</th></tr></thead>
+            <tbody id="adoptions-tbody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--ash)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Donations Panel -->
+      <div class="admin-panel" id="panel-donations_tab">
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Amount</th><th>Frequency</th><th>Message</th><th>Date</th></tr></thead>
+            <tbody id="donations-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--ash)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Volunteers Panel -->
+      <div class="admin-panel" id="panel-volunteers_tab">
+        <div style="overflow-x:auto">
+          <table class="data-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Area</th><th>Contact</th><th>Availability</th><th>Assigned Cases</th></tr></thead>
+            <tbody id="volunteers-tbody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--ash)">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Medical Panel -->
+      <div class="admin-panel" id="panel-medical">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start">
+          <div>
+            <h4 style="margin-bottom:1rem;font-family:'Playfair Display',serif">Add Medical Record</h4>
+            <div class="alert" id="med-alert"></div>
+            <div class="form-group">
+              <label>Animal ID</label>
+              <input type="text" id="med-animal-id" placeholder="e.g. A001"/>
+            </div>
+            <div class="form-group">
+              <label>Treatment</label>
+              <textarea id="med-treatment" placeholder="Treatment details..." style="min-height:70px"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Vaccination Date</label>
+              <input type="date" id="med-vax-date"/>
+            </div>
+            <div class="form-group">
+              <label>Sterilized</label>
+              <select id="med-sterilized">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Recovery Notes</label>
+              <textarea id="med-notes" placeholder="Progress notes..." style="min-height:70px"></textarea>
+            </div>
+            <button class="btn-submit" onclick="addMedical()" style="margin-top:0">Save Medical Record</button>
+          </div>
+          <div style="overflow-x:auto">
+            <h4 style="margin-bottom:1rem;font-family:'Playfair Display',serif">Medical History</h4>
+            <table class="data-table">
+              <thead><tr><th>ID</th><th>Animal</th><th>Treatment</th><th>Vax Date</th><th>Updated</th></tr></thead>
+              <tbody id="medical-tbody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--ash)">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ ADOPT MODAL ══ -->
+<div class="modal-overlay" id="adopt-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-animal-title">Adopt Animal</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="alert" id="adopt-alert"></div>
+    <div class="form-group">
+      <label>Your Full Name *</label>
+      <input type="text" id="a-name" placeholder="Full name"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="a-email" placeholder="Email address"/>
+      </div>
+      <div class="form-group">
+        <label>Phone *</label>
+        <input type="tel" id="a-phone" placeholder="+91 XXXXX XXXXX"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Home Address *</label>
+      <textarea id="a-address" placeholder="Full address including city" style="min-height:70px"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Why do you want to adopt this animal? *</label>
+      <textarea id="a-reason" placeholder="Tell us about your home, lifestyle, experience with pets..."></textarea>
+    </div>
+    <input type="hidden" id="a-animal-id"/>
+    <button class="btn-submit" onclick="submitAdoption()">🏠 Submit Adoption Request</button>
+  </div>
+</div>
+
+<footer>
+  <strong>🐾 Paws Without Homes</strong> — Every Paw Deserves a Home<br>
+  <span style="font-size:.75rem;opacity:.6;margin-top:.5rem;display:block">A community-driven platform for animal rescue, adoption, and welfare in India. Built with ❤️ for strays.</span>
+</footer>
+
+<script>
+const API = "";  // same-origin when served from Python
+// helper used by several form‑submission functions
+function showAlert(target, message, type = 'info') {
+    let el;
+    if (typeof target === 'string' && document.getElementById(target)) {
+        el = document.getElementById(target);
+        el.textContent = message;
+        el.className = `alert alert-${type} show`;
+        setTimeout(() => el.classList.remove('show'), 3000);
+        return;
+    }
+    // no matching element – treat target as the type
+    type = target;
+    el = document.createElement('div');
+    el.className = `alert alert-${type} show`;
+    el.textContent = message;
+    document.body.prepend(el);
+    setTimeout(() => el.remove(), 3000);
+}
+// ── DONATE ───────────────────────────────────────────────────
+function setAmount(v) { document.getElementById('d-amount').value = v; }
+
+async function loadDonationTotal() {
+  // this is still useful when the user first opens the Donate section
+  const res = await post('/api/admin',{password:'admin123',action:'get_donations'});
+  const el = document.getElementById('total-donations');
+  if (res.success) {
+    el.textContent = `₹${(res.total||0).toLocaleString('en-IN')}`;
+  }
+}
+
+
+async function submitDonation() {
+    const body = {
+        name: document.getElementById('d-name').value.trim(),
+        email: document.getElementById('d-email').value.trim(),
+        amount: parseFloat(document.getElementById('d-amount').value) || 0,
+        frequency: document.getElementById('d-freq').value,
+        message: document.getElementById('d-message').value.trim()
+    };
+
+    const res = await post('/api/donate', body);
+
+    if (res.success) {
+        // update total using the value returned by the server
+        document.getElementById('total-donations').textContent =
+            `₹${(res.total || 0).toLocaleString('en-IN')}`;
+
+        ['d-name','d-email','d-amount','d-message']
+            .forEach(id => document.getElementById(id).value = '');
+    }
+
+    showAlert('donate-alert', res.message, res.success ? 'success' : 'error');
+    if (res.success) loadDonationTotal();
+}
+
+// call once on startup
+loadHomeStats();
+loadDonationTotal();
+
+// ── NAVIGATION ──────────────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link,.nav-admin').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btn = [...document.querySelectorAll('.nav-link,.nav-admin')].find(b => 
+    b.getAttribute('onclick')?.includes(`'${id}'`));
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='adopt') loadAnimals();
+  if(id==='donate') loadDonationTotal();
+  if(id==='home') loadHomeStats();
+}
+
+// --- API HELPERS ---
+async function get(path) {
+  const r = await fetch(API + path);
+  return r.json();
+}
+
+async function post(url, data) {
+  return fetch(API + url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(r => r.json());
+}
+
+// ── HOME STATS ───────────────────────────────────────────────
+async function loadHomeStats() {
+  const res = await post('/api/admin', {password:'admin123',action:'get_stats'});
+  if(res.success) {
+    animateNumber('stat-rescued', res.data.rescued);
+    animateNumber('stat-adopted', res.data.adopted);
+    animateNumber('stat-vols', res.data.volunteers);
+  }
+}
+function animateNumber(id, target) {
+  let cur = 0;
+  const el = document.getElementById(id);
+  const step = Math.max(1, Math.ceil(target / 40));
+  const timer = setInterval(()=>{
+    cur = Math.min(cur + step, target);
+    el.textContent = cur;
+    if(cur >= target) clearInterval(timer);
+  }, 40);
+}
+
+// ── REPORT ───────────────────────────────────────────────────
+async function submitReport() {
+  try {
+
+    const body = {
+      location: document.getElementById('r-location').value.trim(),
+      animal_type: document.getElementById('r-type').value,
+      injury_type: document.getElementById('r-injury').value,
+      description: document.getElementById('r-desc').value.trim(),
+      contact: document.getElementById('r-contact').value.trim()
+    };
+
+    const res = await fetch('/api/report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    }).then(r => r.json());
+
+    alert(res.message);
+
+  } catch (err) {
+    console.error(err);
+    alert("Server connection failed");
+  }
+}
+async function checkCase() {
+  const id = document.getElementById('case-id-input').value.trim().toUpperCase();
+  if(!id) return showAlert('case-alert','Please enter a Case ID','error');
+  const res = await get(`/api/case?id=${id}`);
+  if(!res.success) { showAlert('case-alert', res.message, 'error'); document.getElementById('case-result').innerHTML=''; return; }
+  document.getElementById('case-alert').classList.remove('show');
+  const c = res.data;
+  const badgeMap = {Reported:'badge-reported',Rescued:'badge-rescued','Under Treatment':'badge-treatment',Adopted:'badge-adopted'};
+  const tl = (c.timeline||[]).map(t=>`<div class="timeline-item"><div class="timeline-note">${t.status}</div><div class="timeline-time">${t.time}${t.note?' — '+t.note:''}</div></div>`).join('');
+  document.getElementById('case-result').innerHTML = `
+    <div class="case-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+        <strong style="font-size:1.1rem">${c.case_id}</strong>
+        <span class="case-badge ${badgeMap[c.status]||'badge-reported'}">${c.status}</span>
+      </div>
+      <p style="font-size:.85rem;color:var(--ash);margin-bottom:.25rem">📍 ${c.location}</p>
+      <p style="font-size:.85rem;color:var(--ash);margin-bottom:.25rem">🐾 ${c.animal_type} — ${c.injury_type}</p>
+      <p style="font-size:.85rem;color:var(--ash);margin-bottom:.75rem">${c.description}</p>
+      <div class="timeline">${tl}</div>
+    </div>`;
+}
+
+// ── ANIMALS ──────────────────────────────────────────────────
+let allAnimals = [];
+async function loadAnimals() {
+  const res = await get('/api/animals');
+  allAnimals = res.data || [];
+  renderAnimals(allAnimals);
+}
+function filterAnimals(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let filtered = allAnimals;
+  if(type !== 'all'){
+    filtered = allAnimals.filter(a =>
+      a.type && a.type.toLowerCase() === type.toLowerCase()
+    );
+  }
+  renderAnimals(filtered);
+}
+function renderAnimals(animals) {
+    const grid = document.getElementById('animals-grid');
+    if (!animals.length) {
+      grid.innerHTML =
+        '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ash)">No animals found.</div>';
+      return;
+    }
+
+    grid.innerHTML = animals.map(a => `
+      <div class="animal-card" onclick="openAdoptModal('${a.id}','${a.name}')">
+        <img src="${a.image}" alt="${a.name}" class="animal-avatar" style="width:100%;height:200px;object-fit:cover;display:block;border-radius:20px 20px 0 0;">
+        <div class="animal-info">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="animal-name">${a.name}</div>
+            <span style="font-size:.75rem;color:var(--ash)">${a.type}</span>
+          </div>
+          <div class="animal-meta">
+            <span class="tag">${a.age}</span>
+            <span class="tag">${a.gender || 'N/A'}</span>
+            <span class="tag">${a.health || 'Healthy'}</span>
+            ${a.vaccinated ? '<span class="tag tag-green">✓ Vaccinated</span>' : ''}
+            ${a.sterilized ? '<span class="tag tag-green">✓ Sterilized</span>' : ''}
+          </div>
+          <div class="animal-personality">${a.personality}</div>
+          <button class="btn-adopt-now" onclick="event.stopPropagation();openAdoptModal('${a.id}','${a.name}')">
+            🏠 Apply to Adopt
+          </button>
+        </div>
+    </div>`).join('');
+}
+
+function openAdoptModal(id, name) {
+  document.getElementById('a-animal-id').value = id;
+  document.getElementById('modal-animal-title').textContent = `Adopt ${name}`;
+  document.getElementById('adopt-alert').classList.remove('show');
+  document.getElementById('adopt-modal').classList.add('open');
+}
+function closeModal() { document.getElementById('adopt-modal').classList.remove('open'); }
+
+async function submitAdoption() {
+  const body = {
+    animal_id: document.getElementById('a-animal-id').value,
+    name: document.getElementById('a-name').value.trim(),
+    email: document.getElementById('a-email').value.trim(),
+    phone: document.getElementById('a-phone').value.trim(),
+    address: document.getElementById('a-address').value.trim(),
+    reason: document.getElementById('a-reason').value.trim()
+  };
+  const res = await post('/api/adopt', body);
+  showAlert('adopt-alert', res.message, res.success ? 'success' : 'error');
+  if(res.success) {
+    setTimeout(()=>{closeModal();loadAnimals();},1500);
+  }
+}
+
+// ── DONATE ───────────────────────────────────────────────────
+function setAmount(v) { document.getElementById('d-amount').value = v; }
+async function loadDonationTotal() {
+  const res = await post('/api/admin',{password:'admin123',action:'get_donations'});
+  const el = document.getElementById('total-donations');
+  if(res.success) el.textContent = `₹${(res.total||0).toLocaleString('en-IN')}`;
+}
+async function submitDonation() {
+  const body = {
+    name: document.getElementById('d-name').value.trim(),
+    email: document.getElementById('d-email').value.trim(),
+    amount: document.getElementById('d-amount').value,
+    frequency: document.getElementById('d-freq').value,
+    message: document.getElementById('d-message').value.trim()
+  };
+  const res = await post('/api/donate', body);
+  showAlert('donate-alert', res.message, res.success ? 'success' : 'error');
+  if(res.success) {
+    ['d-name','d-email','d-amount','d-message'].forEach(id=>document.getElementById(id).value='');
+    loadDonationTotal();
+  }
+}
+
+// ── VOLUNTEER ────────────────────────────────────────────────
+async function submitVolunteer() {
+  const body = {
+    name: document.getElementById('v-name').value.trim(),
+    area: document.getElementById('v-area').value.trim(),
+    contact: document.getElementById('v-contact').value.trim(),
+    availability: document.getElementById('v-avail').value,
+    skills: document.getElementById('v-skills').value.trim()
+  };
+  const res = await post('/api/volunteer', body);
+  showAlert('vol-alert', res.message, res.success ? 'success' : 'error');
+  if(res.success) ['v-name','v-area','v-contact','v-skills'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ── LOST & FOUND ─────────────────────────────────────────────
+async function submitLostFound() {
+  try {
+    const body = {
+      post_type: document.getElementById('lf-type').value,
+      animal_type: document.getElementById('lf-animal').value,
+      name: document.getElementById('lf-name').value.trim(),
+      location: document.getElementById('lf-location').value.trim(),
+      description: document.getElementById('lf-desc').value.trim(),
+      contact: document.getElementById('lf-contact').value.trim()
+    };
+    const res = await post('/api/lost_found', body);
+    showAlert('lf-alert', res.message, res.success ? 'success' : 'error');
+    if (res.success) {
+      ['lf-name', 'lf-location', 'lf-desc', 'lf-contact'].forEach(id => document.getElementById(id).value = '');
+      searchLostFound();
+    }
+  } catch (err) {
+    console.error('Lost & Found submission error:', err);
+    showAlert('lf-alert', 'Server connection failed. Please try again.', 'error');
+  }
+}
+async function searchLostFound() {
+  const loc = document.getElementById('lf-search-loc').value.trim();
+  const type = document.getElementById('lf-search-type').value;
+  const postType = document.getElementById('lf-search-post').value;
+  let url = '/api/lost_found?';
+  if(loc) url += `location=${encodeURIComponent(loc)}&`;
+  if(type) url += `type=${encodeURIComponent(type)}&`;
+  if(postType) url += `post_type=${encodeURIComponent(postType)}&`;
+  const res = await get(url);
+  const posts = res.data || [];
+  const container = document.getElementById('lf-results');
+  if(!posts.length) { container.innerHTML='<div style="text-align:center;padding:2rem;color:var(--ash)">No posts found matching your search.</div>'; return; }
+  container.innerHTML = `<div class="lf-grid">${posts.map(p=>`
+    <div class="lf-card ${p.post_type==='Found'?'found-card':''}">
+      <span class="lf-badge ${p.post_type==='Lost'?'lf-lost':'lf-found'}">${p.post_type}</span>
+      <div style="font-weight:700;font-size:1rem">${p.name!=='Unknown'?p.name:p.animal_type} (${p.animal_type})</div>
+      <div style="font-size:.8rem;color:var(--ash);margin:.4rem 0">📍 ${p.location}</div>
+      <div style="font-size:.82rem;color:var(--ash);line-height:1.5;margin-bottom:.5rem">${p.description}</div>
+      <div style="font-size:.8rem;font-weight:600">📞 ${p.contact}</div>
+      <div style="font-size:.72rem;color:var(--ash);margin-top:.3rem">${p.posted_at?.split(' ')[0]||''}</div>
+    </div>`).join('')}</div>`;
+}
+
+// ── ADMIN ────────────────────────────────────────────────────
+let adminPwd = '';
+async function adminLogin() {
+  const pwd = document.getElementById('admin-password').value;
+  const res = await post('/api/admin', {password:pwd, action:'get_stats'});
+  if(res.success) {
+    adminPwd = pwd;
+    document.getElementById('admin-login-view').style.display = 'none';
+    document.getElementById('admin-dashboard').style.display = 'block';
+    loadAdminStats();
+    loadAdminPanel('reports');
+  } else {
+    showAlert('admin-login-alert', 'Incorrect password.', 'error');
+  }
+}
+function adminLogout() {
+  adminPwd='';
+  document.getElementById('admin-dashboard').style.display='none';
+  document.getElementById('admin-login-view').style.display='block';
+  document.getElementById('admin-password').value='';
+}
+async function loadAdminStats() {
+  const res = await post('/api/admin',{password:adminPwd,action:'get_stats'});
+  if(res.success) {
+    document.getElementById('as-cases').textContent=res.data.total_cases;
+    document.getElementById('as-rescued').textContent=res.data.rescued;
+    document.getElementById('as-adopted').textContent=res.data.adopted;
+    document.getElementById('as-vols').textContent=res.data.volunteers;
+    document.getElementById('as-donations').textContent='₹'+(res.data.total_donations||0).toLocaleString('en-IN');
+  }
+}
+function adminTab(name, btn) {
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`panel-${name}`).classList.add('active');
+  loadAdminPanel(name);
+}
+async function loadAdminPanel(name) {
+  const actionMap = {reports:'get_reports',adoptions:'get_adoption_requests',donations_tab:'get_donations',volunteers_tab:'get_volunteers',medical:'get_medical'};
+  const res = await post('/api/admin',{password:adminPwd,action:actionMap[name]});
+  if(!res.success) return;
+
+  if(name==='reports') {
+    const statusOpts = ['Reported','Rescued','Under Treatment','Adopted'].map(s=>`<option>${s}</option>`).join('');
+    const rows = (res.data||[]).map(c=>`<tr>
+      <td><strong>${c.case_id}</strong></td>
+      <td>${c.animal_type}</td>
+      <td>${c.location}</td>
+      <td>${c.injury_type}</td>
+      <td><span class="case-badge badge-reported">${c.status}</span></td>
+      <td style="font-size:.75rem">${c.reported_at?.split(' ')[0]||''}</td>
+      <td>
+        <select class="status-select" id="s-${c.case_id}"><option>${c.status}</option>${statusOpts}</select>
+        <button class="btn-sm btn-update" style="margin-left:.3rem" onclick="updateCase('${c.case_id}')">Update</button>
+      </td></tr>`).join('');
+    document.getElementById('reports-tbody').innerHTML = rows||'<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--ash)">No cases yet.</td></tr>';
+  } else if(name==='adoptions') {
+    const rows = (res.data||[]).map(r=>`<tr>
+      <td>${r.id}</td>
+      <td>${r.animal_name} (${r.animal_type})</td>
+      <td>${r.applicant_name}</td>
+      <td>${r.phone}</td>
+      <td><span class="case-badge ${r.status==='Approved'?'badge-rescued':r.status==='Rejected'?'badge-reported':'badge-treatment'}">${r.status}</span></td>
+      <td style="font-size:.75rem">${r.applied_at?.split(' ')[0]||''}</td>
+      <td>
+        ${r.status==='Pending'?`<button class="btn-sm btn-approve" onclick="decideAdoption('${r.id}','Approved')">Approve</button>
+        <button class="btn-sm btn-reject" style="margin-left:.3rem" onclick="decideAdoption('${r.id}','Rejected')">Reject</button>`:'—'}
+      </td></tr>`).join('');
+    document.getElementById('adoptions-tbody').innerHTML = rows||'<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--ash)">No requests yet.</td></tr>';
+  } else if(name==='donations_tab') {
+    const rows = (res.data||[]).map(d=>`<tr>
+      <td>${d.id}</td><td>${d.name}</td>
+      <td><strong>₹${d.amount.toLocaleString('en-IN')}</strong></td>
+      <td>${d.frequency}</td><td>${d.message||'—'}</td>
+      <td style="font-size:.75rem">${d.donated_at?.split(' ')[0]||''}</td></tr>`).join('');
+    document.getElementById('donations-tbody').innerHTML = rows||'<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--ash)">No donations yet.</td></tr>';
+  } else if(name==='volunteers_tab') {
+    const rows = (res.data||[]).map(v=>`<tr>
+      <td>${v.id}</td><td>${v.name}</td><td>${v.area}</td>
+      <td>${v.contact}</td><td>${v.availability}</td>
+      <td>${(v.assigned_cases||[]).map(c=>c.case_id).join(', ')||'None'}</td></tr>`).join('');
+    document.getElementById('volunteers-tbody').innerHTML = rows||'<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--ash)">No volunteers yet.</td></tr>';
+  } else if(name==='medical') {
+    const rows = (res.data||[]).map(m=>`<tr>
+      <td>${m.id}</td><td>${m.animal_id}</td>
+      <td>${m.treatment||'—'}</td><td>${m.vaccination_date||'—'}</td>
+      <td style="font-size:.75rem">${m.updated_at?.split(' ')[0]||''}</td></tr>`).join('');
+    document.getElementById('medical-tbody').innerHTML = rows||'<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--ash)">No records yet.</td></tr>';
+  }
+}
+async function updateCase(caseId) {
+  const status = document.getElementById(`s-${caseId}`).value;
+  const res = await post('/api/admin',{password:adminPwd,action:'update_case_status',case_id:caseId,status,note:'Updated by admin'});
+  if(res.success) loadAdminPanel('reports');
+}
+async function decideAdoption(id, decision) {
+  const res = await post('/api/admin',{password:adminPwd,action:'approve_adoption',req_id:id,decision});
+  if(res.success) { loadAdminPanel('adoptions'); loadAdminStats(); }
+}
+async function addMedical() {
+  const body = {
+    password: adminPwd, action:'update_medical',
+    animal_id: document.getElementById('med-animal-id').value.trim(),
+    treatment: document.getElementById('med-treatment').value.trim(),
+    vaccination_date: document.getElementById('med-vax-date').value,
+    sterilized: document.getElementById('med-sterilized').value==='true',
+    recovery_notes: document.getElementById('med-notes').value.trim()
+  };
+  const res = await post('/api/admin', body);
+  showAlert('med-alert', res.message, res.success?'success':'error');
+  if(res.success) loadAdminPanel('medical');
+}
+
+// ── CLOSE MODAL ON OVERLAY CLICK ─────────────────────────────
+document.getElementById('adopt-modal').addEventListener('click', function(e){
+  if(e.target===this) closeModal();
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+loadHomeStats();
+</script>
+</body>
+</html>
