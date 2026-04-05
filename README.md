@@ -13,7 +13,7 @@ A full-stack web application to help rescue, treat, and rehome stray animals —
 python start.py
 
 # Option 2: Run server directly
-python server.py
+python server1.py
 # Then open: http://localhost:8080
 ```
 
@@ -24,19 +24,28 @@ python server.py
 ## 🏗 Project Structure
 
 ```
-paws-without-homes/
-├── server.py          ← Python HTTP server (no Flask/Django)
-├── index.html         ← Single-page frontend (HTML + CSS + JS)
-├── start.py           ← Quick launcher
+paws_without_homes
+│
+├── server.py          (main backend)
+├── start.py           (optional runner)
+├── animals.json       (database)
 ├── README.md
-└── data/
-    ├── animals.json           ← Adoptable animals
-    ├── report_cases.json      ← Rescue reports (PAW1001, PAW1002...)
-    ├── adoption_requests.json ← Adoption applications
-    ├── volunteers.json        ← Volunteer registrations
-    ├── donations.json         ← Donation records
-    ├── medical_records.json   ← Medical history
-    └── lost_found.json        ← Lost & found posts
+│
+├── templates
+│   └── index.html
+│
+├── static
+│   ├── cat.jpg
+│   ├── cat1.png
+│   ├── dog.jpeg
+│   ├── german_puppy.webp
+│   ├── goldie_puppy.jpg
+│   ├── guide.jpg
+│   ├── kitten.avif
+│   └── puppy_dog.jpeg
+│
+└── .vscode
+    └── launch.json
 ```
 
 ---
