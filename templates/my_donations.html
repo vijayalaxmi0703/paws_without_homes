@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Donations | Paws Without Homes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            terracotta: "#B65A3C",
+            cream: "#F7F0E3",
+            pine: "#294936",
+            moss: "#4E6A4A",
+            bark: "#6B4A3D",
+            sand: "#E8D8BE"
+          },
+          boxShadow: {
+            soft: "0 18px 45px rgba(41, 73, 54, 0.12)"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-cream text-pine">
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(182,90,60,0.14),_transparent_36%),linear-gradient(180deg,_#fffaf4_0%,_#f7f0e3_52%,_#efe3cf_100%)]"></div>
+
+  <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <section class="overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 shadow-soft backdrop-blur">
+      <div class="border-b border-sand/80 bg-gradient-to-r from-terracotta via-[#c77453] to-[#d48e66] px-6 py-8 text-white sm:px-10">
+        <p class="text-sm font-semibold uppercase tracking-[0.32em] text-white/80">Paws Without Homes</p>
+        <div class="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 class="text-3xl font-bold sm:text-4xl">My Donations</h1>
+            <p class="mt-3 max-w-2xl text-sm text-white/85 sm:text-base">
+              Every gift helps us rescue, treat, and rehome animals who need a safe place to land.
+            </p>
+          </div>
+          <div class="rounded-3xl bg-white/14 px-5 py-4 ring-1 ring-white/20">
+            <p class="text-xs uppercase tracking-[0.25em] text-white/75">Welcome back</p>
+            <p class="mt-2 text-xl font-semibold">{{ display_name }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-8 sm:px-10">
+        <div class="mb-8 grid gap-4 md:grid-cols-2">
+          <article class="rounded-3xl border border-sand bg-gradient-to-br from-white to-[#fff6ec] p-6">
+            <p class="text-sm font-medium uppercase tracking-[0.22em] text-bark/70">Total Contribution</p>
+            <p class="mt-3 text-4xl font-bold text-pine">{{ format_inr(total_contribution) }}</p>
+            <p class="mt-3 text-sm text-bark/80">Thank you for helping more furry friends find care and comfort.</p>
+          </article>
+
+          <article class="rounded-3xl border border-sand bg-pine p-6 text-cream">
+            <p class="text-sm font-medium uppercase tracking-[0.22em] text-cream/70">Donation Activity</p>
+            <p class="mt-3 text-4xl font-bold">{{ donations_count }}</p>
+            <p class="mt-3 text-sm text-cream/80">Completed and pending gifts linked to your account.</p>
+          </article>
+        </div>
+
+        {% if donation_history %}
+        <section class="overflow-hidden rounded-3xl border border-sand bg-white">
+          <div class="flex items-center justify-between border-b border-sand px-6 py-4">
+            <div>
+              <h2 class="text-xl font-semibold text-pine">Transaction History</h2>
+              <p class="mt-1 text-sm text-bark/80">A quick look at every campaign you have supported.</p>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-sand">
+              <thead class="bg-[#fcf5ea] text-left text-sm uppercase tracking-[0.18em] text-bark/70">
+                <tr>
+                  <th class="px-6 py-4 font-semibold">Date</th>
+                  <th class="px-6 py-4 font-semibold">Purpose</th>
+                  <th class="px-6 py-4 font-semibold">Amount</th>
+                  <th class="px-6 py-4 font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-sand/80 text-sm text-pine">
+                {% for donation in donation_history %}
+                <tr class="transition hover:bg-[#fff9f1]">
+                  <td class="px-6 py-5 whitespace-nowrap">
+                    <p class="font-medium">{{ donation.date.strftime('%d %b %Y') }}</p>
+                    <p class="mt-1 text-xs text-bark/70">{{ donation.transaction_id }}</p>
+                  </td>
+                  <td class="px-6 py-5">
+                    <p class="font-medium">{{ donation.purpose }}</p>
+                    <p class="mt-1 text-xs text-bark/70">Helping rescue and recovery efforts</p>
+                  </td>
+                  <td class="px-6 py-5 whitespace-nowrap font-semibold text-terracotta">
+                    {{ format_inr(donation.amount) }}
+                  </td>
+                  <td class="px-6 py-5 whitespace-nowrap">
+                    {% set status_key = donation.status|lower %}
+                    <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold
+                      {% if status_key == 'completed' %}
+                        bg-green-100 text-green-800
+                      {% elif status_key == 'pending' %}
+                        bg-amber-100 text-amber-800
+                      {% elif status_key == 'failed' %}
+                        bg-rose-100 text-rose-700
+                      {% else %}
+                        bg-stone-100 text-stone-700
+                      {% endif %}
+                    ">
+                      {{ donation.status }}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        {% else %}
+        <section class="rounded-3xl border border-dashed border-sand bg-[#fff9f1] px-6 py-16 text-center">
+          <div class="mx-auto flex max-w-md flex-col items-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-terracotta/10 text-xl font-bold uppercase tracking-[0.3em] text-terracotta">
+              PW
+            </div>
+            <h2 class="mt-6 text-2xl font-semibold text-pine">No donations yet!</h2>
+            <p class="mt-3 text-base text-bark/80">Help a furry friend today. Your first gift can fund food, medicine, or a safe night of shelter.</p>
+            <a href="/donate" class="mt-6 inline-flex rounded-full bg-terracotta px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9f4d31]">
+              Make a Donation
+            </a>
+          </div>
+        </section>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+</body>
+</html>

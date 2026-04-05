@@ -91,6 +91,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(253,246,236
 .nav-link:hover,.nav-link.active{background:var(--rust);color:var(--white)}
 .nav-admin{font-size:.75rem;background:var(--forest);color:var(--white);padding:.4rem .8rem;border-radius:8px;cursor:pointer;border:none;font-weight:600}
 .nav-admin:hover{background:var(--forest-light)}
+.nav-auth{display:flex;align-items:center;gap:.55rem;margin-left:.6rem}
+.nav-auth-primary{background:var(--rust);color:var(--white)}
+.nav-auth-primary:hover{background:var(--rust-dark)}
+.nav-user-chip{display:none;align-items:center;gap:.5rem;background:var(--white);border:1px solid rgba(196,101,42,.16);border-radius:999px;padding:.25rem .35rem .25rem .8rem;box-shadow:0 2px 12px var(--shadow)}
+.nav-user-chip strong{font-size:.78rem;color:var(--ink)}
 
 /* ── SECTIONS ── */
 .section{display:none;min-height:100vh;padding:80px 0 40px}
@@ -203,6 +208,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(253,246,236
 .total-box{background:linear-gradient(135deg,var(--rust) 0%,var(--rust-dark) 100%);border-radius:var(--radius);padding:1.2rem;text-align:center;color:var(--white);margin-bottom:1.5rem}
 .total-box .total-label{font-size:.85rem;opacity:.8;margin-bottom:.25rem}
 .total-box .total-amount{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900}
+.contribution-card{background:var(--white);border-radius:20px;padding:2rem;box-shadow:0 4px 30px var(--shadow);max-width:760px;margin:2rem auto 0}
+.contribution-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.contribution-head h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--ink)}
+.contribution-head p{font-size:.88rem;color:var(--ash);max-width:430px;line-height:1.6}
+.contribution-total{background:linear-gradient(135deg,var(--forest),var(--forest-light));border-radius:16px;padding:1rem 1.2rem;color:var(--white);min-width:200px}
+.contribution-total-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;opacity:.82}
+.contribution-total-amount{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;margin-top:.2rem}
+.contribution-list{display:grid;gap:.9rem}
+.contribution-item{border:1px solid rgba(107,91,78,.14);border-radius:16px;padding:1rem 1.1rem;background:linear-gradient(180deg,#fff,#fdf8f1)}
+.contribution-row{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.contribution-title{font-weight:700;color:var(--ink)}
+.contribution-meta{font-size:.82rem;color:var(--ash);margin-top:.25rem;line-height:1.5}
+.contribution-amount{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:900;color:var(--rust)}
+.contribution-empty{padding:1.4rem;border:1px dashed rgba(196,101,42,.35);border-radius:16px;text-align:center;color:var(--ash);background:var(--warm)}
+.field-lock{display:none;font-size:.72rem;color:var(--forest);font-weight:700;margin-top:.3rem}
+.loading-inline{display:none;font-size:.85rem;color:var(--ash);text-align:center;padding:1rem 0}
 
 /* ── AWARENESS ── */
 .awareness-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
@@ -278,8 +299,10 @@ footer strong{color:var(--gold)}
   .awareness-grid{grid-template-columns:1fr}
   .guidelines-list{grid-template-columns:1fr}
   .donation-impact{grid-template-columns:1fr}
+  nav{padding:0 1rem;flex-wrap:wrap;height:auto;min-height:64px}
   .nav-links{gap:0}
   .nav-link{font-size:.72rem;padding:.35rem .5rem}
+  .nav-auth{width:100%;justify-content:flex-end;margin:.35rem 0 .55rem}
 }
 
 /* ── LOADING ── */
@@ -301,6 +324,14 @@ footer strong{color:var(--gold)}
     <button class="nav-link" onclick="showSection('lostfound')">🔎 Lost & Found</button>
     <button class="nav-link" onclick="showSection('awareness')">📚 Awareness</button>
     <button class="nav-admin" onclick="showSection('admin')">🛠 Admin</button>
+    <div class="nav-auth">
+      <button id="nav-login-btn" class="nav-link" onclick="goToLogin()">Sign In</button>
+      <button id="nav-register-btn" class="nav-link nav-auth-primary" onclick="goToRegister()">Sign Up</button>
+      <div id="nav-user-chip" class="nav-user-chip">
+        <strong id="nav-user-name">Supporter</strong>
+        <button class="nav-link" onclick="logout()">Logout</button>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -511,6 +542,7 @@ footer strong{color:var(--gold)}
         <div class="form-group">
           <label>Your Name *</label>
           <input type="text" id="d-name" placeholder="Full name"/>
+          <div id="d-name-lock" class="field-lock">Signed in account details are used automatically.</div>
         </div>
         <div class="form-group">
           <label>Email</label>
@@ -531,6 +563,15 @@ footer strong{color:var(--gold)}
         </div>
       </div>
       <div class="form-group">
+        <label>Cause / Category</label>
+        <select id="d-campaign">
+          <option value="General Rescue Fund">General Rescue Fund</option>
+          <option value="Emergency Medical Care">Emergency Medical Care</option>
+          <option value="Food and Shelter">Food and Shelter</option>
+          <option value="Vaccination Drive">Vaccination Drive</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label>Message (Optional)</label>
         <textarea id="d-message" placeholder="A note for the animals..." style="min-height:70px"></textarea>
       </div>
@@ -541,7 +582,23 @@ footer strong{color:var(--gold)}
         <button class="filter-btn" onclick="setAmount(2000)">₹2000</button>
         <button class="filter-btn" onclick="setAmount(5000)">₹5000</button>
       </div>
-      <button class="btn-submit" onclick="submitDonation()">💖 Donate Now</button>
+      <button class="btn-submit" id="donate-submit-btn" onclick="submitDonation()">💖 Donate Now</button>
+    </div>
+    <div class="contribution-card">
+      <div class="contribution-head">
+        <div>
+          <h3>Your Contribution</h3>
+          <p>Your personal donation history lives here, so you can keep track of every rescue meal, vaccine, and safe bed you have helped provide.</p>
+        </div>
+        <div class="contribution-total">
+          <div class="contribution-total-label">Total Contribution</div>
+          <div class="contribution-total-amount" id="contribution-total">₹0</div>
+        </div>
+      </div>
+      <div class="alert" id="contribution-alert"></div>
+      <div id="contribution-loading" class="loading-inline">Loading your contribution history...</div>
+      <div id="contribution-empty" class="contribution-empty" style="display:none">No transactions done yet.</div>
+      <div id="contribution-list" class="contribution-list"></div>
     </div>
   </div>
 </section>
@@ -1330,6 +1387,313 @@ document.getElementById('adopt-modal').addEventListener('click', function(e){
 
 // ── INIT ─────────────────────────────────────────────────────
 loadHomeStats();
+</script>
+<script>
+window.currentUserState = null;
+const razorpayScriptUrl = "https://checkout.razorpay.com/v1/checkout.js";
+
+function ensureRazorpayLoaded() {
+  if (window.Razorpay) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${razorpayScriptUrl}"]`);
+    if (existing) {
+      existing.addEventListener("load", resolve, { once: true });
+      existing.addEventListener("error", () => reject(new Error("Unable to load Razorpay.")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = razorpayScriptUrl;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("Unable to load Razorpay."));
+    document.head.appendChild(script);
+  });
+}
+
+function formatCurrency(amount) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0
+  }).format(Number(amount || 0));
+}
+
+function formatDateValue(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+async function authGet(path) {
+  const response = await fetch(path, { credentials: "same-origin" });
+  return response.json();
+}
+
+async function authPost(path, data) {
+  const response = await fetch(path, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data || {})
+  });
+  return response.json();
+}
+
+function goToLogin(section = "donate") {
+  const next = section ? `/?section=${section}` : "/";
+  window.location.href = `/login?next=${encodeURIComponent(next)}`;
+}
+
+function goToRegister(section = "donate") {
+  const next = section ? `/?section=${section}` : "/";
+  window.location.href = `/register?next=${encodeURIComponent(next)}`;
+}
+
+function applyAuthState() {
+  const user = window.currentUserState;
+  const loginBtn = document.getElementById("nav-login-btn");
+  const registerBtn = document.getElementById("nav-register-btn");
+  const userChip = document.getElementById("nav-user-chip");
+  const userName = document.getElementById("nav-user-name");
+  const nameInput = document.getElementById("d-name");
+  const emailInput = document.getElementById("d-email");
+  const nameLock = document.getElementById("d-name-lock");
+
+  if (!loginBtn || !registerBtn || !userChip || !userName || !nameInput || !emailInput || !nameLock) return;
+
+  if (user) {
+    loginBtn.style.display = "none";
+    registerBtn.style.display = "none";
+    userChip.style.display = "inline-flex";
+    userName.textContent = user.name;
+    nameInput.value = user.name;
+    emailInput.value = user.email;
+    nameInput.readOnly = true;
+    emailInput.readOnly = true;
+    nameLock.style.display = "block";
+  } else {
+    loginBtn.style.display = "inline-flex";
+    registerBtn.style.display = "inline-flex";
+    userChip.style.display = "none";
+    userName.textContent = "Supporter";
+    nameInput.readOnly = false;
+    emailInput.readOnly = false;
+    nameLock.style.display = "none";
+  }
+}
+
+async function loadCurrentUserState() {
+  const res = await authGet("/me");
+  window.currentUserState = res.authenticated ? res.user : null;
+  applyAuthState();
+}
+
+async function logout() {
+  const res = await authPost("/logout", {});
+  window.currentUserState = null;
+  applyAuthState();
+  document.getElementById("contribution-list").innerHTML = "";
+  document.getElementById("contribution-total").textContent = formatCurrency(0);
+  document.getElementById("contribution-empty").style.display = "block";
+  showAlert("success", res.message || "You have been logged out.");
+  window.location.href = "/login";
+}
+
+async function loadDonationTotal() {
+  const res = await authGet("/api/donation-summary");
+  const el = document.getElementById("total-donations");
+  if (res.success && el) el.textContent = formatCurrency(res.total_amount);
+}
+
+async function loadContributionHistory() {
+  const loading = document.getElementById("contribution-loading");
+  const list = document.getElementById("contribution-list");
+  const empty = document.getElementById("contribution-empty");
+  const total = document.getElementById("contribution-total");
+  if (!loading || !list || !empty || !total) return;
+
+  list.innerHTML = "";
+  empty.style.display = "none";
+  loading.style.display = "block";
+
+  const res = await authGet("/my-donations");
+  loading.style.display = "none";
+
+  if (!res.success) {
+    total.textContent = formatCurrency(0);
+    empty.textContent = "No transactions done yet.";
+    empty.style.display = "block";
+    return;
+  }
+
+  total.textContent = formatCurrency(res.total_contribution || 0);
+  const donations = res.donations || [];
+  if (!donations.length) {
+    empty.textContent = "No transactions done yet.";
+    empty.style.display = "block";
+    return;
+  }
+
+  list.innerHTML = donations.map(item => `
+    <div class="contribution-item">
+      <div class="contribution-row">
+        <div>
+          <div class="contribution-title">${item.campaign_name || item.description || "General Rescue Fund"}</div>
+          <div class="contribution-meta">${formatDateValue(item.date)}</div>
+          <div class="contribution-meta">${item.description || "Helping rescue, treatment, and shelter efforts."}</div>
+        </div>
+        <div class="contribution-amount">${formatCurrency(item.amount)}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function loadHomeStats() {
+  const res = await authGet("/api/site-stats");
+  if (res.success) {
+    animateNumber("stat-rescued", res.data.rescued);
+    animateNumber("stat-adopted", res.data.adopted);
+    animateNumber("stat-vols", res.data.volunteers);
+  }
+}
+
+async function showSection(id) {
+  if (id === "donate" && !window.currentUserState) {
+    goToLogin("donate");
+    return;
+  }
+
+  document.querySelectorAll(".section").forEach(section => section.classList.remove("active"));
+  document.querySelectorAll(".nav-link,.nav-admin").forEach(button => button.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  const btn = [...document.querySelectorAll(".nav-link,.nav-admin")].find(button =>
+    button.getAttribute("onclick")?.includes(`'${id}'`)
+  );
+  if (btn) btn.classList.add("active");
+  window.scrollTo(0, 0);
+
+  if (id === "adopt") loadAnimals();
+  if (id === "donate") {
+    await loadDonationTotal();
+    await loadContributionHistory();
+  }
+  if (id === "home") loadHomeStats();
+}
+
+async function submitDonation() {
+  if (!window.currentUserState) {
+    goToLogin("donate");
+    return;
+  }
+
+  const button = document.getElementById("donate-submit-btn");
+  if (button) {
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner"></span>Processing...';
+  }
+
+  const body = {
+    amount: document.getElementById("d-amount").value,
+    frequency: document.getElementById("d-freq").value,
+    campaign_name: document.getElementById("d-campaign").value,
+    description: document.getElementById("d-message").value.trim()
+  };
+
+  let orderResponse;
+  try {
+    await ensureRazorpayLoaded();
+    orderResponse = await authPost("/create-order", body);
+  } catch (error) {
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = "💖 Donate Now";
+    }
+    showAlert("donate-alert", error.message || "Unable to start payment.", "error");
+    return;
+  }
+
+  if (!orderResponse.success) {
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = "💖 Donate Now";
+    }
+    showAlert("donate-alert", orderResponse.message || "Unable to create payment order.", "error");
+    return;
+  }
+
+  const options = {
+    key: orderResponse.razorpay_key,
+    amount: orderResponse.amount,
+    currency: orderResponse.currency || "INR",
+    name: "Paws Without Homes",
+    description: body.campaign_name,
+    order_id: orderResponse.order_id,
+    prefill: {
+      name: orderResponse.donor_name,
+      email: orderResponse.donor_email
+    },
+    notes: {
+      campaign_name: body.campaign_name
+    },
+    theme: {
+      color: "#c4652a"
+    },
+    handler: async function (response) {
+      const verifyResponse = await authPost("/verify-payment", {
+        amount: body.amount,
+        frequency: body.frequency,
+        campaign_name: body.campaign_name,
+        description: body.description,
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature
+      });
+
+      if (button) {
+        button.disabled = false;
+        button.innerHTML = "💖 Donate Now";
+      }
+
+      showAlert("donate-alert", verifyResponse.message, verifyResponse.success ? "success" : "error");
+      if (verifyResponse.success) {
+        document.getElementById("d-amount").value = "";
+        document.getElementById("d-message").value = "";
+        document.getElementById("d-campaign").value = "General Rescue Fund";
+        await loadDonationTotal();
+        await loadContributionHistory();
+      }
+    },
+    modal: {
+      ondismiss: function () {
+        if (button) {
+          button.disabled = false;
+          button.innerHTML = "💖 Donate Now";
+        }
+      }
+    }
+  };
+
+  const paymentObject = new window.Razorpay(options);
+  paymentObject.on("payment.failed", function () {
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = "💖 Donate Now";
+    }
+    showAlert("donate-alert", "Payment failed. Please try again.", "error");
+  });
+  paymentObject.open();
+}
+
+(async function initAuthLayer() {
+  await loadCurrentUserState();
+  await loadDonationTotal();
+  const section = new URLSearchParams(window.location.search).get("section") || "donate";
+  await showSection(section);
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Paws Without Homes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --cream:#fdf6ec;
+      --warm:#f5ebe0;
+      --rust:#c4652a;
+      --rust-dark:#9e4d1e;
+      --forest:#2d5016;
+      --gold:#d4a853;
+      --ink:#1a1208;
+      --ash:#6b5b4e;
+      --white:#fff;
+      --shadow:rgba(26,18,8,.12);
+      --radius:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:linear-gradient(160deg,var(--cream),var(--warm));color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+    .shell{width:100%;max-width:980px;display:grid;grid-template-columns:1.05fr .95fr;background:rgba(255,255,255,.75);backdrop-filter:blur(16px);border-radius:28px;overflow:hidden;box-shadow:0 18px 60px var(--shadow)}
+    .aside{background:linear-gradient(145deg,var(--forest),#4a7c27);color:var(--white);padding:3rem}
+    .aside h1{font-family:'Playfair Display',serif;font-size:2.6rem;line-height:1.1}
+    .aside p{margin-top:1rem;line-height:1.7;color:rgba(255,255,255,.86)}
+    .aside .tag{display:inline-block;margin-bottom:1rem;padding:.45rem .8rem;border-radius:999px;background:rgba(255,255,255,.12);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+    .card{padding:3rem;background:var(--white)}
+    h2{font-family:'Playfair Display',serif;font-size:2rem}
+    .sub{margin-top:.5rem;color:var(--ash);line-height:1.6}
+    .alert{display:none;margin:1rem 0;padding:.9rem 1rem;border-radius:12px;font-size:.92rem}
+    .alert.show{display:block}
+    .alert-error{background:#fdecea;color:#b3261e;border:1px solid #ef9a9a}
+    .alert-success{background:#e8f5e9;color:#1f6a39;border:1px solid #81c784}
+    .field{margin-top:1rem}
+    label{display:block;font-size:.88rem;font-weight:700;margin-bottom:.45rem}
+    input{width:100%;padding:.9rem 1rem;border:1.5px solid rgba(107,91,78,.2);border-radius:12px;background:var(--cream);font:inherit;outline:none}
+    input:focus{border-color:var(--rust);background:var(--white)}
+    button{width:100%;margin-top:1.2rem;border:none;border-radius:14px;padding:1rem;background:var(--rust);color:var(--white);font:inherit;font-weight:700;cursor:pointer}
+    button:hover{background:var(--rust-dark)}
+    .meta{margin-top:1rem;color:var(--ash);font-size:.92rem}
+    .meta a{color:var(--rust);font-weight:700;text-decoration:none}
+    .home-link{display:inline-block;margin-top:1.25rem;color:var(--forest);font-weight:700;text-decoration:none}
+    @media(max-width:800px){.shell{grid-template-columns:1fr}.aside{display:none}.card{padding:2rem}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="aside">
+      <div class="tag">Paws Without Homes</div>
+      <h1>Welcome back to your rescue circle.</h1>
+      <p>Sign in to make a donation, revisit your contribution history, and keep supporting animals who need food, treatment, and a safe place to heal.</p>
+    </aside>
+    <section class="card">
+      <h2>Sign In</h2>
+      <p class="sub">Pick up right where you left off.</p>
+      <div class="alert alert-error" id="login-alert"></div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password">
+      </div>
+      <button id="login-btn" onclick="login()">Sign In</button>
+      <p class="meta">New here? <a href="/register?next={{ next_url|urlencode }}">Create an account</a></p>
+      <a class="home-link" href="/">Back to home</a>
+    </section>
+  </div>
+  <script>
+    const nextUrl = {{ next_url|tojson }};
+    async function login() {
+      const button = document.getElementById("login-btn");
+      const alert = document.getElementById("login-alert");
+      alert.className = "alert alert-error";
+      alert.textContent = "";
+      button.disabled = true;
+      button.textContent = "Signing in...";
+      const response = await fetch("/api/login", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value
+        })
+      });
+      const data = await response.json();
+      button.disabled = false;
+      button.textContent = "Sign In";
+      if (!data.success) {
+        alert.textContent = data.message || "Unable to sign in.";
+        alert.classList.add("show");
+        return;
+      }
+      window.location.href = nextUrl || "/";
+    }
+  </script>
+</body>
+</html>
