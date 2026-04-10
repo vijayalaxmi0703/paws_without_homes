@@ -266,6 +266,15 @@ def contributions_page():
     )
 
 
+@app.route("/requirements")
+def requirements_page():
+    user = get_current_user()
+    return render_template(
+        "requirements.html",
+        display_name=user["name"] if user else "Supporter",
+    )
+
+
 @app.route("/images/<filename>")
 def serve_image(filename):
     return send_from_directory(IMAGES_DIR, filename)
