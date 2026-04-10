@@ -1,13 +1,13 @@
+import base64
+import hashlib
+import hmac
 import json
 import os
 import random
 import re
 import sqlite3
-import hashlib
-import hmac
-import base64
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
+from functools import lru_cache
 from pathlib import Path
 from urllib import error as urllib_error
 from urllib import request as urllib_request
@@ -16,15 +16,23 @@ from uuid import uuid4
 from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
-app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "paws-without-homes-dev-secret")
-app.permanent_session_lifetime = timedelta(days=30)
-
-BASE_DIR = Path(__file__).resolve().parent
+API_DIR = Path(__file__).resolve().parent
+BASE_DIR = API_DIR.parent
 DB_PATH = BASE_DIR / "paws_without_homes.db"
 SCHEMA_PATH = BASE_DIR / "schema.sql"
 IMAGES_DIR = BASE_DIR / "images"
 ANIMALS_FILE = BASE_DIR / "animals.json"
+INDEX_HTML_PATH = BASE_DIR / "index.html"
+SCHEMA_SQL = SCHEMA_PATH.read_text(encoding="utf-8")
+INDEX_HTML = INDEX_HTML_PATH.read_text(encoding="utf-8") if INDEX_HTML_PATH.exists() else ""
+
+app = Flask(
+    __name__,
+    template_folder="../templates",
+    static_folder="../static",
+)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "paws-without-homes-dev-secret")
+app.permanent_session_lifetime = timedelta(days=30)
 
 ADMIN_PASSWORD = "admin123"
 EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
@@ -42,16 +50,19 @@ adoptions = []
 volunteers = []
 reports = []
 lost_found = []
+
+
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=5)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
 
+@lru_cache(maxsize=1)
 def init_db():
     with get_db_connection() as conn:
-        conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
+        conn.executescript(SCHEMA_SQL)
         existing_columns = {
             row["name"] for row in conn.execute("PRAGMA table_info(donations)").fetchall()
         }
@@ -188,7 +199,7 @@ def template_helpers():
 def index():
     if not get_current_user():
         return redirect(url_for("login_page"))
-    return (BASE_DIR / "index.html").read_text(encoding="utf-8")
+    return INDEX_HTML
 
 
 @app.before_request
@@ -688,3 +699,7 @@ def admin():
 
 
 init_db()
+
+
+def handler(environ, start_response):
+    return app(environ, start_response)
