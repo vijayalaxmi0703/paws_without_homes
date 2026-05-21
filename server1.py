@@ -81,7 +81,7 @@ def load_app():
 
 app = load_app()
 
-
 if __name__ == "__main__":
-    print("Starting Paws Without Homes on http://127.0.0.1:5000")
-    app.run(host="127.0.0.1", port=5000, debug=True, use_reloader=False)
+    port = int(os.environ.get("PORT", 10000))
+    print(f"Starting Paws Without Homes on port {port}")
+    app.run(host="0.0.0.0", port=port, debug=False)
