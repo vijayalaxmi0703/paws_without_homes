@@ -1,1 +1,7 @@
-flask
+Flask>=3.0,<4.0
+
+# Production WSGI server (Linux/Heroku/Vercel use)
+gunicorn>=20.1.0
+
+# Lightweight production server for Windows
+waitress>=2.1.0

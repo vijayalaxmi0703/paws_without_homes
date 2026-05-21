@@ -1,103 +1,30 @@
-# 🐾 Paws Without Homes
+# Paws Without Homes
 
-> **"Every Paw Deserves a Home"**
+Flask app for rescue reporting, adoption, volunteering, and donations.
 
-A full-stack web application to help rescue, treat, and rehome stray animals — built entirely with Python, HTML/CSS/JS, and JSON file storage. No SQL. No Django. No external databases.
-
----
-
-## 🚀 How to Run
+## Local run
 
 ```bash
-# Option 1: Use the launcher (opens browser automatically)
-python start.py
-
-# Option 2: Run server directly
-python server1.py
-# Then open: http://localhost:8080
+py -m pip install -r requirements.txt
+py server1.py
 ```
 
-**Requirements:** Python 3.7+ (standard library only — no pip installs needed!)
+Open `http://127.0.0.1:5000`
 
----
+You can also use:
 
-## 🏗 Project Structure
-
-```
-paws_without_homes
-│
-├── server.py          (main backend)
-├── start.py           (optional runner)
-├── animals.json       (database)
-├── README.md
-│
-├── templates
-│   └── index.html
-│
-├── static
-│   ├── cat.jpg
-│   ├── cat1.png
-│   ├── dog.jpeg
-│   ├── german_puppy.webp
-│   ├── goldie_puppy.jpg
-│   ├── guide.jpg
-│   ├── kitten.avif
-│   └── puppy_dog.jpeg
-│
-└── .vscode
-    └── launch.json
+```bash
+py start.py
 ```
 
----
+## Notes
 
-## 📋 Features
+- `api/index.py` is the main Flask app and Vercel entrypoint.
+- `server1.py` is the local runner for the same Flask app.
+- `server.py` is an old legacy server and should not be used for local Flask development.
+- Configure Razorpay with environment variables:
 
-| Module | Features |
-|---|---|
-| 🆘 **Report** | File rescue reports, generate Case IDs (PAW1001+), track status |
-| 🏠 **Adopt** | Browse animals, filter by type, apply for adoption with form |
-| 💖 **Donate** | One-time/monthly donations, impact calculator, live total |
-| 🤝 **Volunteer** | Register volunteers, availability slots |
-| 🔎 **Lost & Found** | Post lost/found alerts, search by location & type |
-| 📚 **Awareness** | Animal laws, first aid, adoption vs buying, sterilization info |
-| 🛠 **Admin Panel** | Password-protected, manage all data, update statuses |
-
----
-
-## 🔐 Admin Access
-
-- **URL:** http://localhost:8080 → click Admin
-- **Password:** `admin123`
-
-Admin can:
-- View & update all rescue case statuses
-- Approve/reject adoption requests
-- View all donations with totals
-- Manage volunteers
-- Add medical records
-
----
-
-## 💾 Technical Details
-
-- **Backend:** Python `http.server` (stdlib only)
-- **Storage:** JSON files via Python's `json` module
-- **Frontend:** Pure HTML5 + CSS3 + Vanilla JavaScript
-- **Case IDs:** Auto-generated (PAW1001, PAW1002, ...)
-- **No SQL, No ORM, No external packages**
-
----
-
-## 🌐 API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/animals?type=Dog` | List animals |
-| GET | `/api/case?id=PAW1001` | Check case status |
-| GET | `/api/lost_found?location=Mumbai` | Search lost & found |
-| POST | `/api/report` | File a rescue report |
-| POST | `/api/adopt` | Submit adoption request |
-| POST | `/api/donate` | Make a donation |
-| POST | `/api/volunteer` | Register as volunteer |
-| POST | `/api/lost_found` | Post lost/found alert |
-| POST | `/api/admin` | Admin operations (password-protected) |
+```bash
+set RAZORPAY_KEY_ID=your_test_key_id
+set RAZORPAY_KEY_SECRET=your_test_key_secret
+```

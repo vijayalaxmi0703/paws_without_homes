@@ -1017,8 +1017,6 @@ async function submitDonation() {
 }
 
 // call once on startup
-loadHomeStats();
-loadDonationTotal();
 
 // ── NAVIGATION ──────────────────────────────────────────────
 function showSection(id) {
@@ -1095,7 +1093,7 @@ async function submitReport() {
     alert("Server connection failed");
   }
 }
-async function checkCase() {
+async function legacyCheckCase() {
   const id = document.getElementById('case-id-input').value.trim().toUpperCase();
   if(!id) return showAlert('case-alert','Please enter a Case ID','error');
   const res = await get(`/api/case?id=${id}`);
@@ -1118,6 +1116,90 @@ async function checkCase() {
 }
 
 // ── ANIMALS ──────────────────────────────────────────────────
+async function checkCase() {
+  const id = document.getElementById('case-id-input').value.trim().toUpperCase();
+  if (!id) return showAlert('case-alert', 'Please enter a Case ID', 'error');
+
+  const res = await get(`/api/case?id=${id}`);
+  if (!res.success) {
+    showAlert('case-alert', res.message, 'error');
+    document.getElementById('case-result').innerHTML = '';
+    return;
+  }
+
+  document.getElementById('case-alert').classList.remove('show');
+
+  const c = res.data || {};
+  const safeValue = (value, fallback = 'Pending') => {
+    if (value === null || value === undefined) return fallback;
+    const text = String(value).trim();
+    return text ? text : fallback;
+  };
+  const escapeHtml = (value) => String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+  const rawStatus = safeValue(c.status, 'Reported').toLowerCase();
+  const volunteerName = safeValue(c.volunteer_name, '');
+  const treatmentStage = safeValue(c.treatment_stage, '');
+  let statusLabel = 'REPORTED';
+  let badgeClass = 'badge-reported';
+
+  if (rawStatus.includes('treatment') || treatmentStage) {
+    statusLabel = 'UNDER TREATMENT';
+    badgeClass = 'badge-treatment';
+  } else if (rawStatus.includes('volunteer') || rawStatus.includes('assigned') || volunteerName) {
+    statusLabel = 'VOLUNTEER ASSIGNED';
+    badgeClass = 'badge-rescued';
+  } else if (rawStatus.includes('adopt')) {
+    statusLabel = 'ADOPTED';
+    badgeClass = 'badge-adopted';
+  } else if (rawStatus.includes('rescued') || rawStatus.includes('rescue')) {
+    statusLabel = 'RESCUED';
+    badgeClass = 'badge-rescued';
+  }
+
+  const caseDetails = {
+    case_id: safeValue(c.case_id || c.id, 'Pending'),
+    location: safeValue(c.location, 'Location pending'),
+    animal_type: safeValue(c.animal_type, 'Animal type pending'),
+    injury_type: safeValue(c.injury_type, 'Assessment pending'),
+    description: safeValue(c.description, 'Description will be updated soon'),
+    volunteer_name: safeValue(c.volunteer_name, 'Assigned soon'),
+    treatment_stage: safeValue(c.treatment_stage, 'Pending')
+  };
+
+  const timelineHtml = (c.timeline || []).map(t => `
+    <div class="timeline-item">
+      <div class="timeline-note">${escapeHtml(safeValue(t.status, 'Status update pending'))}</div>
+      <div class="timeline-time">${escapeHtml(safeValue(t.time, 'Awaiting update'))}${t.note ? ' - ' + escapeHtml(t.note) : ''}</div>
+    </div>
+  `).join('') || `
+    <div class="timeline-item">
+      <div class="timeline-note">Update pending</div>
+      <div class="timeline-time">Our rescue team will post progress here soon.</div>
+    </div>
+  `;
+
+  document.getElementById('case-result').innerHTML = `
+    <div class="case-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+        <strong id="status-case-id" style="font-size:1.1rem">${escapeHtml(caseDetails.case_id)}</strong>
+        <span id="status-label" class="case-badge ${badgeClass}">${statusLabel}</span>
+      </div>
+      <p id="status-location" style="font-size:.85rem;color:var(--ash);margin-bottom:.25rem">Location: ${escapeHtml(caseDetails.location)}</p>
+      <p id="status-animal-type" style="font-size:.85rem;color:var(--ash);margin-bottom:.25rem">Animal Type: ${escapeHtml(caseDetails.animal_type)}</p>
+      <p id="status-description" style="font-size:.85rem;color:var(--ash);margin-bottom:.25rem">Description: ${escapeHtml(caseDetails.description)}</p>
+      <p id="status-volunteer" style="font-size:.85rem;color:var(--ash);margin-bottom:.25rem">Volunteer: ${escapeHtml(caseDetails.volunteer_name)}</p>
+      <p id="status-treatment" style="font-size:.85rem;color:var(--ash);margin-bottom:.25rem">Treatment Status: ${escapeHtml(caseDetails.treatment_stage)}</p>
+      <p id="status-injury" style="font-size:.85rem;color:var(--ash);margin-bottom:.75rem">Rescue Notes: ${escapeHtml(caseDetails.injury_type)}</p>
+      <div class="timeline">${timelineHtml}</div>
+    </div>`;
+}
+
 let allAnimals = [];
 async function loadAnimals() {
   const res = await get('/api/animals');
@@ -1392,7 +1474,6 @@ document.getElementById('adopt-modal').addEventListener('click', function(e){
 });
 
 // ── INIT ─────────────────────────────────────────────────────
-loadHomeStats();
 </script>
 <script>
 window.currentUserState = null;
@@ -1697,7 +1778,7 @@ async function submitDonation() {
 (async function initAuthLayer() {
   await loadCurrentUserState();
   await loadDonationTotal();
-  const section = new URLSearchParams(window.location.search).get("section") || "donate";
+  const section = new URLSearchParams(window.location.search).get("section") || "home";
   await showSection(section);
 })();
 </script>

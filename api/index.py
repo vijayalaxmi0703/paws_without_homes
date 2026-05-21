@@ -7,7 +7,6 @@ import random
 import re
 import sqlite3
 from datetime import datetime, timedelta
-from functools import lru_cache
 from pathlib import Path
 from urllib import error as urllib_error
 from urllib import request as urllib_request
@@ -23,8 +22,6 @@ SCHEMA_PATH = BASE_DIR / "schema.sql"
 IMAGES_DIR = BASE_DIR / "images"
 ANIMALS_FILE = BASE_DIR / "animals.json"
 INDEX_HTML_PATH = BASE_DIR / "index.html"
-SCHEMA_SQL = SCHEMA_PATH.read_text(encoding="utf-8")
-INDEX_HTML = INDEX_HTML_PATH.read_text(encoding="utf-8") if INDEX_HTML_PATH.exists() else ""
 
 app = Flask(
     __name__,
@@ -36,8 +33,8 @@ app.permanent_session_lifetime = timedelta(days=30)
 
 ADMIN_PASSWORD = "admin123"
 EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
-RAZORPAY_KEY_ID = "rzp_test_SZ3E35HN0xA5KP"
-RAZORPAY_KEY_SECRET = "8XF07MHAyTMm8XN4BoTlMKCs"
+RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "").strip()
+RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "").strip()
 RAZORPAY_ORDERS_URL = "https://api.razorpay.com/v1/orders"
 
 if ANIMALS_FILE.exists():
@@ -59,10 +56,13 @@ def get_db_connection():
     return conn
 
 
-@lru_cache(maxsize=1)
 def init_db():
+    if not SCHEMA_PATH.exists():
+        raise FileNotFoundError(f"Database schema not found at {SCHEMA_PATH}")
+
+    schema_sql = SCHEMA_PATH.read_text(encoding="utf-8")
     with get_db_connection() as conn:
-        conn.executescript(SCHEMA_SQL)
+        conn.executescript(schema_sql)
         existing_columns = {
             row["name"] for row in conn.execute("PRAGMA table_info(donations)").fetchall()
         }
@@ -150,6 +150,10 @@ def serialize_donation(row):
     }
 
 
+def is_razorpay_configured():
+    return bool(RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET)
+
+
 def razorpay_auth_header():
     token = base64.b64encode(f"{RAZORPAY_KEY_ID}:{RAZORPAY_KEY_SECRET}".encode("utf-8")).decode("ascii")
     return {"Authorization": f"Basic {token}"}
@@ -197,32 +201,7 @@ def template_helpers():
 
 @app.route("/")
 def index():
-    if not get_current_user():
-        return redirect(url_for("login_page"))
-    return INDEX_HTML
-
-
-@app.before_request
-def require_auth_for_site():
-    current_user = get_current_user()
-    auth_pages = {"login_page", "register_page"}
-    public_endpoints = {"login", "register", "static"} | auth_pages
-
-    if request.path.startswith("/static/"):
-        return None
-
-    if request.endpoint in auth_pages:
-        if current_user:
-            return redirect(url_for("index"))
-        return None
-
-    if request.endpoint in public_endpoints:
-        return None
-
-    if current_user:
-        return None
-
-    return unauthorized_response()
+    return send_from_directory(BASE_DIR, "index.html")
 
 
 @app.route("/login")
@@ -242,6 +221,8 @@ def register_page():
 @app.route("/contributions")
 def contributions_page():
     user = get_current_user()
+    if not user:
+        return redirect(url_for("login_page", next="/contributions"))
 
     with get_db_connection() as conn:
         rows = conn.execute(
@@ -277,10 +258,9 @@ def contributions_page():
 
 @app.route("/requirements")
 def requirements_page():
-    user = get_current_user()
     return render_template(
         "requirements.html",
-        display_name=user["name"] if user else "Supporter",
+        display_name=(get_current_user() or {}).get("name", "Supporter"),
     )
 
 
@@ -401,6 +381,8 @@ def public_site_stats():
 @app.route("/api/donations")
 def get_user_donations():
     current_user = get_current_user()
+    if not current_user:
+        return jsonify({"success": False, "message": "Please sign in to view your donations."}), 401
 
     with get_db_connection() as conn:
         rows = conn.execute(
@@ -442,7 +424,22 @@ def case_status():
     case = next((r for r in reports if r["id"] == case_id), None)
     if not case:
         return jsonify({"success": False, "message": "Case not found"})
-    return jsonify({"success": True, "data": {"id": case_id, "status": case["status"], "timeline": case["timeline"]}})
+    return jsonify(
+        {
+            "success": True,
+            "data": {
+                "case_id": case["id"],
+                "location": case.get("location"),
+                "animal_type": case.get("animal_type"),
+                "injury_type": case.get("injury_type"),
+                "description": case.get("description"),
+                "status": case.get("status"),
+                "volunteer_name": case.get("volunteer_name"),
+                "treatment_stage": case.get("treatment_stage"),
+                "timeline": case.get("timeline", []),
+            },
+        }
+    )
 
 
 @app.route("/api/adopt", methods=["POST"])
@@ -470,13 +467,13 @@ def create_order():
     if not current_user:
         return jsonify({"success": False, "message": "Please sign in to make a donation."}), 401
 
-    if RAZORPAY_KEY_ID == "rzp_test_your_key_id" or RAZORPAY_KEY_SECRET == "your_test_key_secret":
+    if not is_razorpay_configured():
         return jsonify(
             {
                 "success": False,
-                "message": "Configure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET with Razorpay test keys first.",
+                "message": "Razorpay is not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET before accepting payments.",
             }
-        ), 500
+        ), 503
 
     data = request.get_json(silent=True) or {}
     try:
@@ -697,9 +694,12 @@ def admin():
         return jsonify({"success": True, "message": "Medical record added."})
     return jsonify({"success": False, "message": "Unknown action"})
 
-
 init_db()
 
 
 def handler(environ, start_response):
     return app(environ, start_response)
+
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=5000, debug=True, use_reloader=False)

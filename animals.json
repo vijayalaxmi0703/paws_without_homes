@@ -60,7 +60,7 @@
     "rescued_date": "2024-03-18"
   },
   {
-    "id": "A001",
+    "id": "A005",
     "name": "Joy",
     "type": "Dog",
     "breed": "Labrador Mix",
@@ -75,7 +75,7 @@
     "rescued_date": "2024-01-15"
   },
   {
-    "id": "A005",
+    "id": "A006",
     "name": "Rocky",
     "type": "Dog",
     "breed": "Indie",
@@ -90,7 +90,7 @@
     "rescued_date": "2024-04-01"
   },
   {
-    "id": "A001",
+    "id": "A007",
     "name": "Bruno",
     "type": "Dog",
     "breed": "Indie Mix",
@@ -106,7 +106,7 @@
   },
 
   {
-    "id": "A001",
+    "id": "A008",
     "name": "Max",
     "type": "Kitten",
     "breed": "Indie Mix",
@@ -116,7 +116,7 @@
     "vaccinated": true,
     "sterilized": true,
     "personality": "Playful, friendly, loves kids",
-    "image": "/static/kitten.AVIF",
+    "image": "/static/kitten.avif",
     "status": "Available",
     "rescued_date": "2024-01-15"
   }
