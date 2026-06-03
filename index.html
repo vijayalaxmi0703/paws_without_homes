@@ -96,6 +96,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(253,246,236
 .nav-auth-primary:hover{background:var(--rust-dark)}
 .nav-user-chip{display:none;align-items:center;gap:.5rem;background:var(--white);border:1px solid rgba(196,101,42,.16);border-radius:999px;padding:.25rem .35rem .25rem .8rem;box-shadow:0 2px 12px var(--shadow)}
 .nav-user-chip strong{font-size:.78rem;color:var(--ink)}
+/* Mobile hamburger menu */
+.hamburger-btn{display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:.5rem;color:var(--rust)}
+.mobile-menu{display:none;position:absolute;top:64px;left:0;right:0;background:rgba(253,246,236,.98);backdrop-filter:blur(12px);border-bottom:1px solid rgba(196,101,42,.15);z-index:999;flex-direction:column;padding:0}
+.mobile-menu-link{display:block;padding:.85rem 1.25rem;font-size:1rem;color:var(--ash);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.06);background:none;border:none;cursor:pointer;text-align:left;width:100%;transition:background .2s}
+.mobile-menu-link:hover{background:rgba(196,101,42,.08)}
+.mobile-menu-link.active{background:var(--rust);color:var(--white)}
+.mobile-menu-admin{background:var(--forest);color:var(--white)}
+.mobile-menu-auth{margin-top:.5rem;padding-top:.5rem;border-top:1px solid rgba(0,0,0,.06)}
+.mobile-menu-signup{background:var(--rust);color:var(--white);font-weight:700}
 
 /* ── SECTIONS ── */
 .section{display:none;min-height:100vh;padding:80px 0 40px}
@@ -303,6 +312,50 @@ footer strong{color:var(--gold)}
   .nav-links{gap:0}
   .nav-link{font-size:.72rem;padding:.35rem .5rem}
   .nav-auth{width:100%;justify-content:flex-end;margin:.35rem 0 .55rem}
+  .hamburger-btn{display:block}
+  .mobile-menu.open{display:flex}
+  .nav-links{display:none}
+  
+  /* Report page mobile fixes */
+  #report > .container > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr;gap:1.5rem}
+  #report .form-card{padding:1.5rem}
+  #report .btn-submit{padding:.9rem 1.25rem;font-size:1rem;min-height:52px}
+  #report > .container > div > div > div[style*="background:linear-gradient(135deg,#fff3e0,#ffe0b2)"]{padding:1.25rem;line-height:1.7}
+  
+  /* Adopt page mobile fixes */
+  .animal-grid{grid-template-columns:1fr;gap:1.25rem}
+  .animal-card{max-width:100%}
+  .animal-avatar{height:200px;border-radius:20px 20px 0 0}
+  .animal-name{font-size:1.25rem}
+  .animal-meta{flex-wrap:wrap;gap:.4rem}
+  .tag{font-size:.75rem}
+  .btn-adopt-now{width:100%;min-height:48px;font-size:1rem}
+  .filter-bar{flex-wrap:nowrap;overflow-x:auto;gap:.5rem;padding-bottom:.5rem;margin-bottom:1rem}
+  .filter-btn{padding:.45rem 1rem;flex-shrink:0}
+  .guidelines-box{padding:1.25rem}
+  .guidelines-list li{margin-bottom:.5rem}
+  
+  /* Section headings mobile */
+  .section-header h2{font-size:clamp(1.6rem,6vw,2.2rem)}
+  
+  /* General mobile spacing */
+  .section{padding:80px 0 2rem}
+  .container{padding:0 1rem}
+  .menu-grid{grid-template-columns:1fr}
+  
+  /* Lost & Found mobile */
+  #lostfound > .container > div[style*="grid-template-columns:1fr 1.4fr"]{grid-template-columns:1fr;gap:1.5rem}
+  
+  /* Admin mobile */
+  .admin-grid{grid-template-columns:1fr 1fr}
+  #admin .admin-panel > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr}
+  
+  /* Medical panel mobile */
+  #panel-medical > div{grid-template-columns:1fr}
+  
+  /* All buttons min-height */
+  button{min-height:44px}
+  .btn-primary,.btn-secondary,.btn-submit,.filter-btn,.btn-search,.btn-adopt-now{min-height:44px}
 }
 
 /* ── LOADING ── */
@@ -315,6 +368,7 @@ footer strong{color:var(--gold)}
 <!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="showSection('home')"><span>🐾</span> Paws Without Homes</div>
+  <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
   <div class="nav-links">
     <button class="nav-link active" onclick="showSection('home')">Home</button>
     <button class="nav-link" onclick="showSection('report')">🆘 Report</button>
@@ -332,6 +386,21 @@ footer strong{color:var(--gold)}
         <strong id="nav-user-name">Supporter</strong>
         <button class="nav-link" onclick="logout()">Logout</button>
       </div>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-menu-link active" onclick="showSection('home');closeMobileMenu()">Home</button>
+    <button class="mobile-menu-link" onclick="showSection('report');closeMobileMenu()">🆘 Report</button>
+    <button class="mobile-menu-link" onclick="showSection('adopt');closeMobileMenu()">🏠 Adopt</button>
+    <button class="mobile-menu-link" onclick="showSection('donate');closeMobileMenu()">💖 Donate</button>
+    <button class="mobile-menu-link" onclick="showSection('volunteer');closeMobileMenu()">🤝 Volunteer</button>
+    <button class="mobile-menu-link" onclick="showSection('lostfound');closeMobileMenu()">🔎 Lost & Found</button>
+    <button class="mobile-menu-link" onclick="showSection('awareness');closeMobileMenu()">📚 Awareness</button>
+    <button class="mobile-menu-link" onclick="window.location.href='/requirements';closeMobileMenu()">📋 Requirements</button>
+    <button class="mobile-menu-link mobile-menu-admin" onclick="showSection('admin');closeMobileMenu()">🛠 Admin</button>
+    <div class="mobile-menu-auth">
+      <button class="mobile-menu-link" onclick="goToLogin();closeMobileMenu()">Sign In</button>
+      <button class="mobile-menu-link mobile-menu-signup" onclick="goToRegister();closeMobileMenu()">Sign Up</button>
     </div>
   </div>
 </nav>
@@ -1655,9 +1724,9 @@ async function showSection(id) {
   }
 
   document.querySelectorAll(".section").forEach(section => section.classList.remove("active"));
-  document.querySelectorAll(".nav-link,.nav-admin").forEach(button => button.classList.remove("active"));
+  document.querySelectorAll(".nav-link,.nav-admin,.mobile-menu-link").forEach(button => button.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-  const btn = [...document.querySelectorAll(".nav-link,.nav-admin")].find(button =>
+  const btn = [...document.querySelectorAll(".nav-link,.nav-admin,.mobile-menu-link")].find(button =>
     button.getAttribute("onclick")?.includes(`'${id}'`)
   );
   if (btn) btn.classList.add("active");
@@ -1669,6 +1738,16 @@ async function showSection(id) {
     await loadContributionHistory();
   }
   if (id === "home") loadHomeStats();
+}
+
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.remove('open');
 }
 
 async function submitDonation() {
