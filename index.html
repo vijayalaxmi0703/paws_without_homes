@@ -302,60 +302,164 @@ footer strong{color:var(--gold)}
 
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  /* Page container */
+  main, .shell, .container, [class*="max-w"] {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  /* Section spacing */
+  section {
+    margin-bottom: 2rem;
+  }
+  /* All buttons touch-friendly */
+  button, a[class*="btn"], [role="button"] {
+    min-height: 44px;
+  }
+  /* Headings scale down */
+  h1 { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; }
+  h2 { font-size: clamp(1.3rem, 5vw, 1.8rem) !important; }
+  /* Form inputs comfortable */
+  input, select, textarea {
+    width: 100% !important;
+    font-size: 1rem !important;
+    padding: 0.8rem 1rem !important;
+    border-radius: 10px !important;
+  }
+  /* No horizontal scroll on tables */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   .hero-content{grid-template-columns:1fr;gap:2rem}
   .hero-visual{display:none}
   .form-row{grid-template-columns:1fr}
   .awareness-grid{grid-template-columns:1fr}
   .guidelines-list{grid-template-columns:1fr}
   .donation-impact{grid-template-columns:1fr}
-  nav{padding:0 1rem;flex-wrap:wrap;height:auto;min-height:64px}
-  .nav-links{gap:0}
-  .nav-link{font-size:.72rem;padding:.35rem .5rem}
-  .nav-auth{width:100%;justify-content:flex-end;margin:.35rem 0 .55rem}
-  .hamburger-btn{display:block}
-  .mobile-menu.open{display:flex}
-  .nav-links{display:none}
+  nav{position:relative;padding:0 1rem;flex-wrap:wrap;height:auto;min-height:64px}
+  nav > ul, nav > .nav-links, nav > [class*="flex"] > a:not(:first-child) {
+    display: none !important;
+  }
+  #mob-menu-btn { display: inline-flex !important; }
+  #mob-menu a {
+    display: block;
+    padding: 0.9rem 1.25rem;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    text-decoration: none;
+    color: inherit;
+  }
+  #mob-menu a:hover { background: rgba(0,0,0,0.04); }
+  #mob-menu .admin-link {
+    background: #2d5016;
+    color: white;
+    margin: 0.75rem;
+    border-radius: 10px;
+    border-bottom: none;
+  }
+  #mob-menu .signup-link {
+    margin: 0.75rem;
+    border-radius: 10px;
+    border-bottom: none;
+    text-align: center;
+    font-weight: 700;
+  }
   
   /* Report page mobile fixes */
-  #report > .container > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr;gap:1.5rem}
-  #report .form-card{padding:1.5rem}
-  #report .btn-submit{padding:.9rem 1.25rem;font-size:1rem;min-height:52px}
-  #report > .container > div > div > div[style*="background:linear-gradient(135deg,#fff3e0,#ffe0b2)"]{padding:1.25rem;line-height:1.7}
+  #report > .container > div[style*="grid-template-columns:1fr 1fr"]{display:flex !important;flex-direction:column !important;gap:1.25rem !important}
+  #report .form-card{padding:1.25rem}
+  #report .btn-submit{width:100%;padding:1rem 1.25rem;font-size:1rem;line-height:1.3;min-height:52px;white-space:normal;text-align:center}
+  #report > .container > div > div > div[style*="background:linear-gradient(135deg,#fff3e0,#ffe0b2)"]{padding:1.25rem}
+  #report > .container > div > div > div[style*="background:linear-gradient(135deg,#fff3e0,#ffe0b2)"] p{line-height:1.6}
+  #report > .container > div > div > div[style*="background:linear-gradient(135deg,#fff3e0,#ffe0b2)"] p strong{white-space:nowrap;word-break:keep-all}
   
   /* Adopt page mobile fixes */
+  .animal-card, [class*="animal"], [class*="card"] {
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .animal-card img, [class*="animal"] img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  .animal-card-body, .card-body {
+    padding: 1rem 1.1rem 1.25rem;
+  }
+  .animal-name, [class*="animal-name"] {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .tags, [class*="tags"], [class*="badge"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.6rem;
+  }
+  .tag, [class*="tag"], [class*="badge"] span {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+  }
+  .adopt-btn, [class*="adopt"] button, [class*="adopt"] a {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1rem;
+    border-radius: 14px;
+    min-height: 50px;
+    font-weight: 700;
+    margin-top: 0.75rem;
+  }
+  .filter-row, [class*="filter"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .filter-btn {
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
   .animal-grid{grid-template-columns:1fr;gap:1.25rem}
   .animal-card{max-width:100%}
-  .animal-avatar{height:200px;border-radius:20px 20px 0 0}
-  .animal-name{font-size:1.25rem}
+  .animal-avatar{height:220px;border-radius:20px 20px 0 0}
+  .animal-name{font-size:1.3rem;font-weight:700;margin-bottom:0.5rem}
   .animal-meta{flex-wrap:wrap;gap:.4rem}
-  .tag{font-size:.75rem}
-  .btn-adopt-now{width:100%;min-height:48px;font-size:1rem}
-  .filter-bar{flex-wrap:nowrap;overflow-x:auto;gap:.5rem;padding-bottom:.5rem;margin-bottom:1rem}
-  .filter-btn{padding:.45rem 1rem;flex-shrink:0}
+  .tag{font-size:.75rem;padding:.3rem .7rem;border-radius:999px}
+  .btn-adopt-now{width:100%;padding:.9rem;font-size:1rem;border-radius:14px;min-height:50px;font-weight:700;margin-top:.75rem}
+  .filter-bar{flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+  .filter-btn{padding:.45rem 1.1rem;border-radius:999px;font-size:.9rem;white-space:nowrap}
   .guidelines-box{padding:1.25rem}
   .guidelines-list li{margin-bottom:.5rem}
   
   /* Section headings mobile */
-  .section-header h2{font-size:clamp(1.6rem,6vw,2.2rem)}
+  .section-header h2{font-size:clamp(1.3rem,5vw,1.8rem)}
   
   /* General mobile spacing */
   .section{padding:80px 0 2rem}
-  .container{padding:0 1rem}
   .menu-grid{grid-template-columns:1fr}
   
   /* Lost & Found mobile */
-  #lostfound > .container > div[style*="grid-template-columns:1fr 1.4fr"]{grid-template-columns:1fr;gap:1.5rem}
+  #lostfound > .container > div[style*="grid-template-columns:1fr 1.4fr"]{display:flex !important;flex-direction:column !important;gap:1.25rem !important}
   
   /* Admin mobile */
   .admin-grid{grid-template-columns:1fr 1fr}
-  #admin .admin-panel > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr}
+  #admin .admin-panel > div[style*="grid-template-columns:1fr 1fr"]{display:flex !important;flex-direction:column !important;gap:1.25rem !important}
   
   /* Medical panel mobile */
-  #panel-medical > div{grid-template-columns:1fr}
-  
-  /* All buttons min-height */
-  button{min-height:44px}
-  .btn-primary,.btn-secondary,.btn-submit,.filter-btn,.btn-search,.btn-adopt-now{min-height:44px}
+  #panel-medical > div{display:flex !important;flex-direction:column !important;gap:1.25rem !important}
 }
 
 /* ── LOADING ── */
@@ -368,7 +472,10 @@ footer strong{color:var(--gold)}
 <!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="showSection('home')"><span>🐾</span> Paws Without Homes</div>
-  <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
+  <button id="mob-menu-btn" aria-label="Open menu"
+    style="display:none; background:none; border:none; cursor:pointer; padding:0.5rem; font-size:1.6rem; color:inherit;">
+    &#9776;
+  </button>
   <div class="nav-links">
     <button class="nav-link active" onclick="showSection('home')">Home</button>
     <button class="nav-link" onclick="showSection('report')">🆘 Report</button>
@@ -388,20 +495,18 @@ footer strong{color:var(--gold)}
       </div>
     </div>
   </div>
-  <div class="mobile-menu" id="mobile-menu">
-    <button class="mobile-menu-link active" onclick="showSection('home');closeMobileMenu()">Home</button>
-    <button class="mobile-menu-link" onclick="showSection('report');closeMobileMenu()">🆘 Report</button>
-    <button class="mobile-menu-link" onclick="showSection('adopt');closeMobileMenu()">🏠 Adopt</button>
-    <button class="mobile-menu-link" onclick="showSection('donate');closeMobileMenu()">💖 Donate</button>
-    <button class="mobile-menu-link" onclick="showSection('volunteer');closeMobileMenu()">🤝 Volunteer</button>
-    <button class="mobile-menu-link" onclick="showSection('lostfound');closeMobileMenu()">🔎 Lost & Found</button>
-    <button class="mobile-menu-link" onclick="showSection('awareness');closeMobileMenu()">📚 Awareness</button>
-    <button class="mobile-menu-link" onclick="window.location.href='/requirements';closeMobileMenu()">📋 Requirements</button>
-    <button class="mobile-menu-link mobile-menu-admin" onclick="showSection('admin');closeMobileMenu()">🛠 Admin</button>
-    <div class="mobile-menu-auth">
-      <button class="mobile-menu-link" onclick="goToLogin();closeMobileMenu()">Sign In</button>
-      <button class="mobile-menu-link mobile-menu-signup" onclick="goToRegister();closeMobileMenu()">Sign Up</button>
-    </div>
+  <div id="mob-menu" style="display:none; position:absolute; top:100%; left:0; right:0; background:inherit; z-index:999; box-shadow:0 8px 24px rgba(0,0,0,0.12); border-top:1px solid rgba(0,0,0,0.08);">
+    <a href="#" onclick="showSection('home'); return false;">Home</a>
+    <a href="#" onclick="showSection('report'); return false;">🆘 Report</a>
+    <a href="#" onclick="showSection('adopt'); return false;">🏠 Adopt</a>
+    <a href="#" onclick="showSection('donate'); return false;">💖 Donate</a>
+    <a href="#" onclick="showSection('volunteer'); return false;">🤝 Volunteer</a>
+    <a href="#" onclick="showSection('lostfound'); return false;">🔎 Lost & Found</a>
+    <a href="#" onclick="showSection('awareness'); return false;">📚 Awareness</a>
+    <a href="/requirements">📋 Requirements</a>
+    <a href="#" onclick="showSection('admin'); return false;" class="admin-link">🛠 Admin</a>
+    <a href="#" onclick="goToLogin(); return false;">Sign In</a>
+    <a href="#" onclick="goToRegister(); return false;" class="signup-link">Sign Up</a>
   </div>
 </nav>
 
@@ -1859,6 +1964,19 @@ async function submitDonation() {
   await loadDonationTotal();
   const section = new URLSearchParams(window.location.search).get("section") || "home";
   await showSection(section);
+})();
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('mob-menu-btn');
+  var menu = document.getElementById('mob-menu');
+  if(!btn || !menu) return;
+  btn.addEventListener('click', function(){
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ menu.style.display = 'none'; });
+  });
 })();
 </script>
 </body>

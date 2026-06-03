@@ -134,5 +134,36 @@
       </div>
     </section>
   </main>
+  <style>
+    @media(max-width:768px){
+      html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+      }
+      main, .shell, .container, [class*="max-w"] {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+      section {
+        margin-bottom: 2rem;
+      }
+      button, a[class*="btn"], [role="button"] {
+        min-height: 44px;
+      }
+      h1 { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; }
+      h2 { font-size: clamp(1.3rem, 5vw, 1.8rem) !important; }
+      input, select, textarea {
+        width: 100% !important;
+        font-size: 1rem !important;
+        padding: 0.8rem 1rem !important;
+        border-radius: 10px !important;
+      }
+      table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
 </body>
 </html>
