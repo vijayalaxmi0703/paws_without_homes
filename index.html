@@ -380,67 +380,67 @@ footer strong{color:var(--gold)}
   #report > .container > div > div > div[style*="background:linear-gradient(135deg,#fff3e0,#ffe0b2)"] p strong{white-space:nowrap;word-break:keep-all}
   
   /* Adopt page mobile fixes */
-  .animal-card, [class*="animal"], [class*="card"] {
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 1.25rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  .animals-grid, .animal-list, [class*="animals"], [class*="pet-list"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.75rem !important;
+    padding: 0.75rem !important;
   }
-  .animal-card img, [class*="animal"] img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
+  .animal-card, [class*="animal-card"], [class*="pet-card"] {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.09) !important;
+    background: #fff !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
-  .animal-card-body, .card-body {
-    padding: 1rem 1.1rem 1.25rem;
+  .animal-card img, [class*="animal-card"] img {
+    width: 100% !important;
+    height: 140px !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+  .animal-card-body, [class*="card-body"], [class*="animal-info"] {
+    padding: 0.6rem 0.7rem 0.75rem !important;
   }
   .animal-name, [class*="animal-name"] {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.3rem !important;
   }
-  .tags, [class*="tags"], [class*="badge"] {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 0.6rem;
+  .tag, [class*="tag"], [class*="badge"] {
+    font-size: 0.65rem !important;
+    padding: 0.2rem 0.5rem !important;
+    border-radius: 999px !important;
+    margin: 0.15rem 0.15rem 0 0 !important;
+    display: inline-block !important;
   }
-  .tag, [class*="tag"], [class*="badge"] span {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
-  }
-  .adopt-btn, [class*="adopt"] button, [class*="adopt"] a {
-    width: 100%;
-    padding: 0.9rem;
-    font-size: 1rem;
-    border-radius: 14px;
-    min-height: 50px;
-    font-weight: 700;
-    margin-top: 0.75rem;
+  .adopt-btn, [class*="adopt"] button, [class*="adopt-btn"] {
+    width: 100% !important;
+    padding: 0.6rem 0.5rem !important;
+    font-size: 0.8rem !important;
+    border-radius: 10px !important;
+    margin-top: 0.5rem !important;
+    min-height: 38px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
   }
   .filter-row, [class*="filter"] {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+    padding: 0.5rem 0.75rem !important;
+    margin-bottom: 0.5rem !important;
   }
-  .filter-btn {
-    padding: 0.45rem 1.1rem;
-    border-radius: 999px;
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-  .animal-grid{grid-template-columns:1fr;gap:1.25rem}
-  .animal-card{max-width:100%}
-  .animal-avatar{height:220px;border-radius:20px 20px 0 0}
-  .animal-name{font-size:1.3rem;font-weight:700;margin-bottom:0.5rem}
+  .animal-grid{grid-template-columns:1fr 1fr !important;gap:0.75rem !important;padding:0.75rem !important}
+  .animal-card{max-width:100%;border-radius:16px !important;overflow:hidden !important;box-shadow:0 2px 12px rgba(0,0,0,0.09) !important;background:#fff !important;display:flex !important;flex-direction:column !important}
+  .animal-avatar{height:140px !important;border-radius:16px 16px 0 0}
+  .animal-name{font-size:0.95rem !important;font-weight:700 !important;margin-bottom:0.3rem !important}
   .animal-meta{flex-wrap:wrap;gap:.4rem}
-  .tag{font-size:.75rem;padding:.3rem .7rem;border-radius:999px}
-  .btn-adopt-now{width:100%;padding:.9rem;font-size:1rem;border-radius:14px;min-height:50px;font-weight:700;margin-top:.75rem}
-  .filter-bar{flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
-  .filter-btn{padding:.45rem 1.1rem;border-radius:999px;font-size:.9rem;white-space:nowrap}
+  .tag{font-size:0.65rem !important;padding:0.2rem 0.5rem !important;border-radius:999px !important;margin:0.15rem 0.15rem 0 0 !important;display:inline-block !important}
+  .btn-adopt-now{width:100% !important;padding:0.6rem 0.5rem !important;font-size:0.8rem !important;border-radius:10px !important;min-height:38px !important;font-weight:700 !important;text-align:center !important;margin-top:0.5rem !important}
+  .filter-bar{flex-wrap:wrap;gap:0.4rem;padding:0.5rem 0.75rem !important;margin-bottom:0.5rem !important}
+  .filter-btn{padding:0.45rem 1.1rem;border-radius:999px;font-size:0.9rem;white-space:nowrap}
   .guidelines-box{padding:1.25rem}
   .guidelines-list li{margin-bottom:.5rem}
   
